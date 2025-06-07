@@ -71,35 +71,28 @@ router.post('/', [
     .isEmail()
     .withMessage('邮箱格式不正确'),
 
-  // 学籍信息验证
+  // 学籍信息验证 - 更新为大学生字段
   body('studentId')
     .matches(/^\d{10}$/)
     .withMessage('学号必须是10位数字'),
+  body('college')
+    .notEmpty()
+    .withMessage('学院是必填项'),
+  body('major')
+    .notEmpty()
+    .withMessage('专业是必填项'),
   body('grade')
-    .isIn(['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'])
+    .isIn(['大一', '大二', '大三', '大四', '研一', '研二', '研三'])
     .withMessage('年级选择不正确'),
+  body('degree')
+    .isIn(['本科', '硕士', '博士'])
+    .withMessage('学历选择不正确'),
   body('class')
     .notEmpty()
-    .withMessage('班级是必填项')
-    .isLength({ max: 20 })
-    .withMessage('班级名称不能超过20个字符'),
+    .withMessage('班级是必填项'),
   body('enrollmentYear')
     .isInt({ min: 2000, max: new Date().getFullYear() })
     .withMessage('入学年份不正确'),
-
-  // 家庭信息验证（可选）
-  body('parentInfo.fatherPhone')
-    .optional()
-    .matches(/^1[3-9]\d{9}$/)
-    .withMessage('父亲联系电话格式不正确'),
-  body('parentInfo.motherPhone')
-    .optional()
-    .matches(/^1[3-9]\d{9}$/)
-    .withMessage('母亲联系电话格式不正确'),
-  body('parentInfo.emergencyPhone')
-    .optional()
-    .matches(/^1[3-9]\d{9}$/)
-    .withMessage('紧急联系电话格式不正确'),
 
   handleValidationErrors
 ], createStudent);
@@ -145,16 +138,26 @@ router.put('/:id', [
     .optional()
     .matches(/^\d{10}$/)
     .withMessage('学号必须是10位数字'),
+  body('college')
+    .optional()
+    .notEmpty()
+    .withMessage('学院不能为空'),
+  body('major')
+    .optional()
+    .notEmpty()
+    .withMessage('专业不能为空'),
   body('grade')
     .optional()
-    .isIn(['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'])
+    .isIn(['大一', '大二', '大三', '大四', '研一', '研二', '研三'])
     .withMessage('年级选择不正确'),
+  body('degree')
+    .optional()
+    .isIn(['本科', '硕士', '博士'])
+    .withMessage('学历选择不正确'),
   body('class')
     .optional()
     .notEmpty()
-    .withMessage('班级不能为空')
-    .isLength({ max: 20 })
-    .withMessage('班级名称不能超过20个字符'),
+    .withMessage('班级不能为空'),
   body('enrollmentYear')
     .optional()
     .isInt({ min: 2000, max: new Date().getFullYear() })

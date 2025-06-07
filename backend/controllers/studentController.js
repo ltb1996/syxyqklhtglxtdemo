@@ -15,29 +15,35 @@ const getStudents = async (req, res) => {
       limit = 10,
       search = '',
       grade = '',
-      class: className = '',
-      status = ''
+      college = '',
+      degree = '',
+      status = '',
+      class: className = ''
     } = req.query;
 
     // 构建查询条件
     const query = {};
     
-    // 搜索条件
+    // 搜索条件 - 更新为大学生字段
     if (search) {
       const searchRegex = new RegExp(search, 'i');
       query.$or = [
         { name: searchRegex },
         { studentId: searchRegex },
         { phone: searchRegex },
-        { 'parentInfo.fatherName': searchRegex },
-        { 'parentInfo.motherName': searchRegex }
+        { email: searchRegex },
+        { college: searchRegex },
+        { major: searchRegex },
+        { class: searchRegex }
       ];
     }
 
-    // 筛选条件
+    // 筛选条件 - 添加大学生特有的筛选
     if (grade) query.grade = grade;
-    if (className) query.class = className;
+    if (college) query.college = college;
+    if (degree) query.degree = degree;
     if (status) query.status = status;
+    if (className) query.class = className;
 
     // 计算分页
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -160,13 +166,19 @@ const deleteStudent = async (req, res) => {
   }
 };
 
-// 获取统计信息
+// 获取统计信息 - 更新为大学生统计
 const getStatistics = async (req, res) => {
   try {
+    console.log('开始获取统计信息...');
+    
     const [
       totalStudents,
       gradeStats,
-      statusStats
+      collegeStats,
+      degreeStats,
+      statusStats,
+      avgGpaResult,
+      excellentStudents
     ] = await Promise.all([
       // 总学生数
       Student.countDocuments(),
@@ -177,18 +189,65 @@ const getStatistics = async (req, res) => {
         { $sort: { _id: 1 } }
       ]),
       
+      // 按学院统计
+      Student.aggregate([
+        { $group: { _id: '$college', count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+      ]),
+      
+      // 按学历统计
+      Student.aggregate([
+        { $group: { _id: '$degree', count: { $sum: 1 } } }
+      ]),
+      
       // 按状态统计
       Student.aggregate([
         { $group: { _id: '$status', count: { $sum: 1 } } }
-      ])
+      ]),
+      
+      // 平均GPA
+      Student.aggregate([
+        { $match: { 'academicInfo.gpa': { $exists: true, $ne: null } } },
+        { $group: { _id: null, avgGpa: { $avg: '$academicInfo.gpa' } } }
+      ]),
+      
+      // 优秀学生数（GPA >= 3.7）
+      Student.countDocuments({ 'academicInfo.gpa': { $gte: 3.7 } })
     ]);
+
+    // 单独计算奖学金统计
+    const scholarshipStudentsCount = await Student.countDocuments({
+      'academicInfo.scholarships.0': { $exists: true }
+    });
+
+    // 按奖学金级别统计
+    const scholarshipStats = await Student.aggregate([
+      { $match: { 'academicInfo.scholarships.0': { $exists: true } } },
+      { $unwind: '$academicInfo.scholarships' },
+      { $group: { _id: '$academicInfo.scholarships.level', count: { $sum: 1 } } }
+    ]);
+
+    console.log('奖学金统计结果:', scholarshipStats);
+    console.log('获奖学金学生数:', scholarshipStudentsCount);
 
     const statistics = {
       total: totalStudents,
       byGrade: gradeStats,
-      byStatus: statusStats
+      byCollege: collegeStats,
+      byDegree: degreeStats,
+      byStatus: statusStats,
+      avgGpa: avgGpaResult[0]?.avgGpa ? Number(avgGpaResult[0].avgGpa.toFixed(2)) : 0,
+      excellentCount: excellentStudents,
+      scholarshipStudentsCount, // 获得奖学金的学生总数
+      scholarships: scholarshipStats.reduce((acc, item) => {
+        if (item._id) {
+          acc[item._id] = item.count;
+        }
+        return acc;
+      }, {})
     };
 
+    console.log('最终统计结果:', statistics);
     success(res, statistics, '获取统计信息成功');
   } catch (err) {
     console.error('获取统计信息错误:', err);

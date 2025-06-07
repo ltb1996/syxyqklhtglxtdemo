@@ -385,7 +385,7 @@ export default {
 }
 
 .settings-container {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
 }
 
@@ -440,6 +440,7 @@ export default {
 .setting-item {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
 }
 
