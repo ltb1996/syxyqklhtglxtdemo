@@ -564,11 +564,15 @@ export default {
 }
 
 .college-item {
-  margin-bottom: 15px;
+  margin-bottom: 100px;
+}
+
+.college-item:last-child {
+  margin-bottom: 0px;
 }
 
 .college-bar {
-  height: 8px;
+  height: 15px;
   background: #f5f7fa;
   border-radius: 4px;
   margin-bottom: 8px;
@@ -604,11 +608,11 @@ export default {
 
 /* 年级分布图表 */
 .grade-chart {
-  padding: 20px 25px;
+  /* padding: 20px 25px; */
   display: flex;
   justify-content: space-around;
   align-items: end;
-  height: 200px;
+  height: 350px;
 }
 
 .grade-item {
@@ -620,7 +624,7 @@ export default {
 
 .grade-bar {
   width: 30px;
-  height: 120px;
+  height: 280px;
   background: #f5f7fa;
   border-radius: 15px;
   display: flex;
@@ -668,7 +672,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 15px;
+  padding: 12px;
   background: #f8f9fa;
   border-radius: 12px;
   transition: all 0.3s ease;
