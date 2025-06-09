@@ -83,7 +83,7 @@
           </el-row>
           
           <el-form-item v-if="editMode">
-            <el-button type="primary" @click="updateProfile" :loading="loading">
+            <el-button type="primary" @click="submitProfileUpdate" :loading="loading">
               保存修改
             </el-button>
             <el-button @click="resetForm">重置</el-button>
@@ -150,7 +150,7 @@
       
       <template #footer>
         <el-button @click="showPasswordDialog = false">取消</el-button>
-        <el-button type="primary" @click="changePassword" :loading="passwordLoading">
+        <el-button type="primary" @click="submitPasswordChange" :loading="passwordLoading">
           确认修改
         </el-button>
       </template>
@@ -264,10 +264,10 @@ export default {
     const initForm = () => {
       if (userInfo.value) {
         Object.assign(profileForm, {
-          name: userInfo.value.name,
-          email: userInfo.value.email,
-          username: userInfo.value.username,
-          role: userInfo.value.role
+          name: userInfo.value.name || '',
+          email: userInfo.value.email || '',
+          username: userInfo.value.username || '',
+          role: userInfo.value.role || ''
         })
       }
     }
@@ -277,15 +277,20 @@ export default {
       editMode.value = false
     }
     
-    const updateProfile = async () => {
+    const submitProfileUpdate = async () => {
       if (!profileFormRef.value) return
       
       await profileFormRef.value.validate(async (valid) => {
         if (valid) {
           loading.value = true
           try {
-            const response = await updateProfile(profileForm)
-            localStorage.setItem('user', JSON.stringify(response.data))
+            const response = await updateProfile({
+              name: profileForm.name,
+              email: profileForm.email
+            })
+            // 更新本地存储的用户信息
+            const updatedUser = { ...userInfo.value, ...response.data }
+            localStorage.setItem('user', JSON.stringify(updatedUser))
             ElMessage.success('信息更新成功')
             editMode.value = false
           } catch (error) {
@@ -297,16 +302,20 @@ export default {
       })
     }
     
-    const changePassword = async () => {
+    const submitPasswordChange = async () => {
       if (!passwordFormRef.value) return
       
       await passwordFormRef.value.validate(async (valid) => {
         if (valid) {
           passwordLoading.value = true
           try {
-            await changePassword(passwordForm)
+            await changePassword({
+              oldPassword: passwordForm.oldPassword,
+              newPassword: passwordForm.newPassword
+            })
             ElMessage.success('密码修改成功')
             showPasswordDialog.value = false
+            // 清空表单
             Object.keys(passwordForm).forEach(key => {
               passwordForm[key] = ''
             })
@@ -356,8 +365,8 @@ export default {
       getAccountAge,
       formatDate,
       resetForm,
-      updateProfile,
-      changePassword,
+      submitProfileUpdate,
+      submitPasswordChange,
       showLoginHistory
     }
   }
@@ -367,7 +376,7 @@ export default {
 <style scoped>
 .profile-page {
   padding: 20px;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: calc(100vh - 60px);
 }
 
@@ -378,67 +387,83 @@ export default {
 
 .profile-card, .info-card, .security-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 30px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .profile-header {
   display: flex;
   gap: 30px;
   margin-bottom: 30px;
+  align-items: center;
 }
 
 .avatar-section {
-  text-align: center;
+  /* text-align: center;
+  flex-shrink: 0; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .avatar-section .el-button {
   margin-top: 15px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 8px;
+}
+
+.user-details {
+  flex: 1;
 }
 
 .user-details h2 {
   margin: 0 0 10px 0;
-  color: #303133;
+  color: #2c3e50;
   font-size: 28px;
   font-weight: 600;
 }
 
 .user-role {
-  color: #409eff;
   font-size: 16px;
-  margin: 0 0 5px 0;
+  color: #667eea;
+  margin: 5px 0;
   font-weight: 500;
 }
 
 .user-email {
-  color: #909399;
-  margin: 0 0 15px 0;
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0 15px 0;
 }
 
 .profile-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 30px;
-  padding-top: 30px;
-  border-top: 1px solid #ebeef5;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
 }
 
 .stat-item {
   text-align: center;
+  flex: 1;
 }
 
 .stat-item h3 {
-  margin: 0 0 8px 0;
-  color: #409eff;
-  font-size: 28px;
-  font-weight: 700;
+  margin: 0 0 5px 0;
+  font-size: 24px;
+  color: #667eea;
+  font-weight: 600;
 }
 
 .stat-item p {
   margin: 0;
-  color: #909399;
+  color: #666;
   font-size: 14px;
 }
 
@@ -446,20 +471,28 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #ebeef5;
+  border-bottom: 1px solid #eee;
 }
 
 .card-header h3 {
   margin: 0;
-  color: #303133;
+  color: #2c3e50;
   font-size: 20px;
   font-weight: 600;
 }
 
+.card-header .el-button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 8px;
+}
+
 .security-items {
-  space-y: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .security-item {
@@ -467,38 +500,68 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background: #fafafa;
-  border-radius: 8px;
-  margin-bottom: 15px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  border: 1px solid #eee;
 }
 
 .security-info h4 {
   margin: 0 0 5px 0;
-  color: #303133;
+  color: #2c3e50;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .security-info p {
   margin: 0;
-  color: #909399;
+  color: #666;
   font-size: 14px;
 }
 
+.security-item .el-button {
+  border-radius: 8px;
+}
+
+/* 表单样式优化 */
+.el-form-item {
+  margin-bottom: 20px;
+}
+
+.el-input {
+  border-radius: 8px;
+}
+
+.el-input__wrapper {
+  border-radius: 8px;
+}
+
+/* 对话框样式 */
+.el-dialog {
+  border-radius: 16px;
+}
+
+.el-dialog__header {
+  padding: 20px 20px 10px;
+}
+
+.el-dialog__body {
+  padding: 10px 20px 20px;
+}
+
+.el-dialog__footer {
+  padding: 10px 20px 20px;
+}
+
+/* 响应式设计 */
 @media (max-width: 768px) {
-  .profile-page {
-    padding: 10px;
-  }
-  
   .profile-header {
     flex-direction: column;
     text-align: center;
-    gap: 20px;
   }
   
   .profile-stats {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
   }
   
   .security-item {

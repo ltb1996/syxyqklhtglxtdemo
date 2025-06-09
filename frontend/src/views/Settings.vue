@@ -300,7 +300,7 @@ export default {
     const basicSettings = reactive({
       systemName: '学生信息管理系统',
       version: '1.0.0',
-      adminEmail: 'admin@example.com',
+      adminEmail: '610030835@qq.com',
       systemStatus: true,
       pageSize: 20,
       autoBackup: true,

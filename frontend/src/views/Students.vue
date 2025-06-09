@@ -476,6 +476,7 @@ export default {
   padding: 20px;
   background: #f5f7fa;
   min-height: 100vh;
+  position: relative;
 }
 
 .page-header {
@@ -599,8 +600,8 @@ export default {
 }
 
 .batch-actions {
-  position: fixed;
-  bottom: 20px;
+  position: absolute;
+  bottom: 75px;
   left: 50%;
   transform: translateX(-50%);
   background: white;

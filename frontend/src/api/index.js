@@ -45,8 +45,13 @@ api.interceptors.response.use(
 )
 
 // API方法
+// 认证相关
 export const login = (data) => api.post('/auth/login', data)
 export const getProfile = () => api.get('/auth/profile')
+export const updateProfile = (data) => api.put('/auth/profile', data)
+export const changePassword = (data) => api.put('/auth/change-password', data)
+
+// 学生管理相关
 export const getStudents = (params) => api.get('/students', { params })
 export const getStudent = (id) => api.get(`/students/${id}`)
 export const createStudent = (data) => api.post('/students', data)
