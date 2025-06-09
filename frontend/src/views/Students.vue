@@ -494,6 +494,7 @@ export default {
   color: #303133;
   font-size: 24px;
   font-weight: 600;
+  text-align: left;
 }
 
 .header-content p {

@@ -175,7 +175,7 @@
                 <el-icon><GoldMedal /></el-icon>
               </div>
               <div class="scholarship-info">
-                <h4>{{ statistics.scholarships?.national || 0 }}</h4>
+                <h4>{{ statistics.scholarships?.['国家级'] || 0 }}</h4>
                 <p>国家级奖学金</p>
               </div>
             </div>
@@ -184,7 +184,7 @@
                 <el-icon><Star /></el-icon>
               </div>
               <div class="scholarship-info">
-                <h4>{{ statistics.scholarships?.provincial || 0 }}</h4>
+                <h4>{{ statistics.scholarships?.['省级'] || 0 }}</h4>
                 <p>省级奖学金</p>
               </div>
             </div>
@@ -193,7 +193,7 @@
                 <el-icon><Trophy /></el-icon>
               </div>
               <div class="scholarship-info">
-                <h4>{{ statistics.scholarships?.school || 0 }}</h4>
+                <h4>{{ statistics.scholarships?.['校级'] || 0 }}</h4>
                 <p>校级奖学金</p>
               </div>
             </div>
@@ -277,7 +277,8 @@ export default {
     const fetchStatistics = async () => {
       try {
         const response = await getStatistics()
-        Object.assign(statistics, response.data)
+        Object.assign(statistics, response.data);
+        console.log(statistics.scholarships, '444444444444444444444444444444444444444');
       } catch (error) {
         console.error('获取统计数据失败:', error)
       }

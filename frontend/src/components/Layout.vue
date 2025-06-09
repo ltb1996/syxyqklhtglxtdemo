@@ -42,7 +42,7 @@
           >
             <el-menu-item index="/dashboard" class="menu-item-custom">
               <el-icon><Odometer /></el-icon>
-              <span>仪表盘</span>
+              <span>首页</span>
               <div class="menu-item-indicator"></div>
             </el-menu-item>
             
@@ -200,7 +200,7 @@ export default {
     
     const breadcrumbs = computed(() => {
       const breadcrumbMap = {
-        '/dashboard': [{ title: '仪表盘', path: '/dashboard' }],
+        '/dashboard': [{ title: '首页', path: '/dashboard' }],
         '/students': [{ title: '学生管理', path: '/students' }],
         '/profile': [{ title: '个人中心', path: '/profile' }],
         '/settings': [{ title: '系统设置', path: '/settings' }]

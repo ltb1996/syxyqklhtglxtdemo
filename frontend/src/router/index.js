@@ -33,7 +33,7 @@ const routes = [
         name: 'Dashboard',
         component: Dashboard,
         meta: {
-          title: '仪表盘',
+          title: '首页',
           icon: 'Odometer'
         }
       },
@@ -96,7 +96,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   
-  // 如果已登录用户访问登录页，重定向到仪表盘
+  // 如果已登录用户访问登录页，重定向到首页
   if (to.path === '/login' && localStorage.getItem('token')) {
     next('/dashboard')
     return
