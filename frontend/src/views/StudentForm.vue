@@ -256,7 +256,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 import { ref, reactive, computed, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { createStudent, updateStudent } from "../api";
@@ -311,9 +311,9 @@ export default {
 
     const rules = {
       name: [{ required: true, message: "请输入学生姓名", trigger: "blur" }],
-      gender: [{ required: true, message: "请选择性别", trigger: "change" }],
+      gender: [{ required: true, message: "请选择性别", trigger: "blur" }],
       birthday: [
-        { required: true, message: "请选择出生日期", trigger: "change" },
+        { required: true, message: "请选择出生日期", trigger: "blur" },
       ],
       idCard: [
         { required: true, message: "请输入身份证号", trigger: "blur" },
@@ -339,12 +339,12 @@ export default {
         { required: true, message: "请输入学号", trigger: "blur" },
         { pattern: /^\d{10}$/, message: "学号必须是10位数字", trigger: "blur" },
       ],
-      college: [{ required: true, message: "请选择学院", trigger: "change" }],
+      college: [{ required: true, message: "请选择学院", trigger: "blur" }],
       major: [{ required: true, message: "请输入专业名称", trigger: "blur" }],
       class: [{ required: true, message: "请输入班级", trigger: "blur" }],
-      grade: [{ required: true, message: "请选择年级", trigger: "change" }],
+      grade: [{ required: true, message: "请选择年级", trigger: "blur" }],
       degree: [
-        { required: true, message: "请选择学历层次", trigger: "change" },
+        { required: true, message: "请选择学历层次", trigger: "blur" },
       ],
     };
 
@@ -377,6 +377,41 @@ export default {
               0,
               1
             );
+          }
+        } else {
+          // 添加模式：重置表单为默认值
+          Object.assign(form, {
+            name: "",
+            gender: "男",
+            birthday: null,
+            idCard: "",
+            phone: "",
+            email: "",
+            nationality: "中国",
+            politicalStatus: "群众",
+            studentId: "",
+            college: "",
+            major: "",
+            class: "",
+            grade: "",
+            degree: "本科",
+            enrollmentYear: new Date().getFullYear(),
+            expectedGraduationYear: new Date().getFullYear() + 4,
+            status: "在读",
+            academicInfo: {
+              gpa: null,
+              totalCredits: null,
+              completedCredits: null,
+            },
+          });
+
+          // 重置年份选择器
+          enrollmentYearDate.value = null;
+          graduationYearDate.value = null;
+
+          // 清除表单验证
+          if (formRef.value) {
+            formRef.value.clearValidate();
           }
         }
       },
@@ -443,7 +478,7 @@ export default {
 };
 </script>
   
-  <style scoped>
+<style scoped>
 .student-form {
   max-height: 70vh;
   overflow-y: auto;

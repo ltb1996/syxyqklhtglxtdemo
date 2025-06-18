@@ -420,7 +420,7 @@ export default {
   height: 48px;
   line-height: 48px;
   background-color: transparent !important;
-  margin: 0 10px 5px 10px;
+  /* margin: 0 10px 5px 10px; */
   border-radius: 8px;
   position: relative;
   transition: all 0.3s ease;
