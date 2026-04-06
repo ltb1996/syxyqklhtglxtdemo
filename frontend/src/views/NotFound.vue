@@ -1,20 +1,20 @@
 <template>
-  <div class="not-found">
+  <div class="not-found-page">
     <div class="not-found-content">
       <div class="error-illustration">
-        <el-icon size="120" color="#409eff"><Warning /></el-icon>
+        <el-icon class="warning-icon">
+          <Warning />
+        </el-icon>
       </div>
-      <h1>404</h1>
-      <h2>页面未找到</h2>
-      <p>抱歉，您访问的页面不存在或已被删除。</p>
+      <h1 class="error-code">404</h1>
+      <h2 class="error-title">Page Not Found</h2>
+      <p class="error-desc">Sorry, the page you are looking for doesn't exist or has been moved.</p>
       <div class="action-buttons">
-        <el-button type="primary" size="large" @click="goHome">
-          <el-icon><House /></el-icon>
-          返回首页
+        <el-button class="secondary-btn" size="large" @click="goBack">
+          Go Back
         </el-button>
-        <el-button size="large" @click="goBack">
-          <el-icon><Back /></el-icon>
-          返回上页
+        <el-button type="primary" class="primary-btn" size="large" @click="goHome">
+          Return to Dashboard
         </el-button>
       </div>
     </div>
@@ -32,15 +32,15 @@ export default {
   },
   setup() {
     const router = useRouter()
-    
+
     const goHome = () => {
       router.push('/dashboard')
     }
-    
+
     const goBack = () => {
       router.go(-1)
     }
-    
+
     return {
       goHome,
       goBack
@@ -50,67 +50,110 @@ export default {
 </script>
 
 <style scoped>
-.not-found {
+.not-found-page {
   height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background-color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
 }
 
 .not-found-content {
   text-align: center;
-  max-width: 600px;
-  padding: 40px;
+  max-width: 480px;
+  padding: 40px 20px;
 }
 
 .error-illustration {
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
-h1 {
-  font-size: 72px;
-  font-weight: 700;
-  margin: 0 0 20px 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+.warning-icon {
+  font-size: 48px;
+  color: #9ca3af;
+  background-color: #f3f4f6;
+  padding: 24px;
+  border-radius: 50%;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
-h2 {
-  font-size: 32px;
+.error-code {
+  font-size: 96px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.error-title {
+  font-size: 24px;
   font-weight: 600;
-  margin: 0 0 20px 0;
+  margin: 0 0 16px 0;
+  color: #374151;
+  letter-spacing: -0.01em;
 }
 
-p {
-  font-size: 18px;
+.error-desc {
+  font-size: 16px;
   margin: 0 0 40px 0;
-  opacity: 0.9;
+  color: #6b7280;
   line-height: 1.6;
 }
 
 .action-buttons {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .not-found-content {
-    padding: 20px;
+/* 按钮样式复用之前的现代化设计 */
+.primary-btn {
+  background-color: #111827;
+  border-color: #111827;
+  color: white;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.primary-btn:hover {
+  background-color: #374151;
+  border-color: #374151;
+  color: white;
+}
+
+.secondary-btn {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.secondary-btn:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+@media (max-width: 640px) {
+  .error-code {
+    font-size: 72px;
   }
-  
-  h1 {
-    font-size: 48px;
+
+  .error-title {
+    font-size: 20px;
   }
-  
-  h2 {
-    font-size: 24px;
-  }
-  
+
   .action-buttons {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+  }
+
+  .action-buttons .el-button {
+    margin-left: 0;
   }
 }
 </style>
