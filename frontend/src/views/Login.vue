@@ -6,19 +6,20 @@
         <div class="brand-content">
           <div class="logo-wrapper">
             <div class="logo-icon">
-              <el-icon><School /></el-icon>
+              <img :src="faviconIcon" alt="Student Admin Logo" class="logo-image" />
             </div>
             <span class="logo-text">Student Admin</span>
           </div>
           <h1 class="brand-title">Welcome to Student Management System</h1>
-          <p class="brand-desc">A modern, efficient, and comprehensive solution for managing student information, academic records, and career development.</p>
+          <p class="brand-desc">A modern, efficient, and comprehensive solution for managing student information,
+            academic records, and career development.</p>
         </div>
         <!-- 背景插图或纹理 -->
         <div class="brand-illustration">
           <img src="../assets/bg.png" alt="System Illustration" class="hero-image" />
         </div>
       </div>
-      
+
       <!-- 右侧：登录表单 -->
       <div class="form-section">
         <div class="form-container">
@@ -27,54 +28,39 @@
             <p>Please enter your credentials to access the system.</p>
           </div>
 
-          <el-form 
-            :model="loginForm" 
-            :rules="rules" 
-            ref="loginFormRef" 
-            class="modern-login-form"
-            label-position="top"
-          >
+          <el-form :model="loginForm" :rules="rules" ref="loginFormRef" class="modern-login-form" label-position="top">
             <el-form-item prop="username" label="Username">
-              <el-input
-                v-model="loginForm.username"
-                placeholder="admin / user"
-                class="modern-input"
-                @keyup.enter="handleLogin"
-              >
+              <el-input v-model="loginForm.username" placeholder="admin / user" class="modern-input"
+                @keyup.enter="handleLogin">
                 <template #prefix>
-                  <el-icon><User /></el-icon>
+                  <el-icon>
+                    <User />
+                  </el-icon>
                 </template>
               </el-input>
             </el-form-item>
-            
+
             <el-form-item prop="password" label="Password">
-              <el-input
-                v-model="loginForm.password"
-                type="password"
-                placeholder="••••••"
-                class="modern-input"
-                @keyup.enter="handleLogin"
-                show-password
-              >
+              <el-input v-model="loginForm.password" type="password" placeholder="••••••" class="modern-input"
+                @keyup.enter="handleLogin" show-password>
                 <template #prefix>
-                  <el-icon><Lock /></el-icon>
+                  <el-icon>
+                    <Lock />
+                  </el-icon>
                 </template>
               </el-input>
             </el-form-item>
-            
+
             <div class="form-options">
               <el-checkbox v-model="rememberMe" class="modern-checkbox">Remember me</el-checkbox>
               <a href="#" class="forgot-link">Forgot password?</a>
             </div>
-            
-            <el-button
-              type="primary"
-              class="primary-btn login-btn"
-              :loading="loading"
-              @click="handleLogin"
-            >
+
+            <el-button type="primary" class="primary-btn login-btn" :loading="loading" @click="handleLogin">
               Sign In
-              <el-icon class="btn-icon-right"><Right /></el-icon>
+              <el-icon class="btn-icon-right">
+                <Right />
+              </el-icon>
             </el-button>
           </el-form>
         </div>
@@ -88,24 +74,25 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { login } from '../api'
-import { User, Lock, Right, School } from '@element-plus/icons-vue'
+import { User, Lock, Right } from '@element-plus/icons-vue'
+import faviconIcon from '../assets/favicon.ico'
 
 export default {
   name: 'Login',
   components: {
-    User, Lock, Right, School
+    User, Lock, Right
   },
   setup() {
     const router = useRouter()
     const loginFormRef = ref()
     const loading = ref(false)
     const rememberMe = ref(false)
-    
+
     const loginForm = reactive({
       username: 'admin',
       password: '123456'
     })
-    
+
     const rules = {
       username: [
         { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -114,10 +101,10 @@ export default {
         { required: true, message: '请输入密码', trigger: 'blur' }
       ]
     }
-    
+
     const handleLogin = async () => {
       if (!loginFormRef.value) return
-      
+
       await loginFormRef.value.validate(async (valid) => {
         if (valid) {
           loading.value = true
@@ -135,8 +122,9 @@ export default {
         }
       })
     }
-    
+
     return {
+      faviconIcon,
       loginForm,
       rules,
       loginFormRef,
@@ -189,14 +177,22 @@ export default {
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
-  background-color: #3b82f6;
+  width: 42px;
+  height: 42px;
+  /* background-color: #3b82f6; */
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .logo-text {
@@ -212,6 +208,7 @@ export default {
   letter-spacing: -0.03em;
   margin: 0 0 24px 0;
   color: #f9fafb;
+  text-align: left;
 }
 
 .brand-desc {
@@ -220,6 +217,7 @@ export default {
   color: #9ca3af;
   margin: 0;
   max-width: 480px;
+  text-align: left;
 }
 
 .brand-illustration {
@@ -291,6 +289,7 @@ export default {
   padding: 8px 16px;
   transition: all 0.2s;
 }
+
 .modern-input :deep(.el-input__wrapper:hover),
 .modern-input :deep(.el-input__wrapper.is-focus) {
   border-color: #111827;
@@ -298,9 +297,11 @@ export default {
 }
 
 .modern-input :deep(.el-input__inner) {
-  height: 28px; /* makes total height larger due to padding */
+  height: 28px;
+  /* makes total height larger due to padding */
   font-size: 15px;
 }
+
 .modern-input :deep(.el-input__prefix) {
   color: #9ca3af;
   margin-right: 8px;
@@ -318,6 +319,7 @@ export default {
   background-color: #111827;
   border-color: #111827;
 }
+
 .modern-checkbox :deep(.el-checkbox__label) {
   color: #4b5563;
   font-size: 14px;
@@ -330,6 +332,7 @@ export default {
   text-decoration: none;
   transition: color 0.2s;
 }
+
 .forgot-link:hover {
   color: #2563eb;
 }
@@ -352,7 +355,9 @@ export default {
   border-radius: 8px;
   font-weight: 500;
 }
-.primary-btn:hover, .primary-btn:focus {
+
+.primary-btn:hover,
+.primary-btn:focus {
   background-color: #374151;
   border-color: #374151;
   color: white;
@@ -373,37 +378,39 @@ export default {
   .login-split-container {
     flex-direction: column;
   }
-  
+
   .brand-section {
     flex: none;
     height: 240px;
     padding: 32px 24px;
     justify-content: center;
   }
-  
+
   .logo-wrapper {
     margin-bottom: 16px;
   }
-  
+
   .brand-title {
     font-size: 28px;
     margin-bottom: 8px;
   }
-  
+
   .brand-desc {
-    display: none; /* 在移动端隐藏过长的描述 */
+    display: none;
+    /* 在移动端隐藏过长的描述 */
   }
-  
+
   .brand-illustration {
-    display: none; /* 移动端隐藏背景图，保持简洁 */
+    display: none;
+    /* 移动端隐藏背景图，保持简洁 */
   }
-  
+
   .form-section {
     flex: 1;
     align-items: flex-start;
     padding-top: 48px;
   }
-  
+
   .form-container {
     max-width: 100%;
     padding: 0 16px;

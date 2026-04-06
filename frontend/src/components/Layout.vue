@@ -7,14 +7,14 @@
         <div class="logo-section">
           <div class="logo">
             <div class="logo-icon">
-              <el-icon size="24"><School /></el-icon>
+              <img :src="faviconIcon" alt="Student Admin Logo" class="logo-image" />
             </div>
             <div v-show="!isCollapse" class="logo-content">
               <span class="logo-title">Student Admin</span>
             </div>
           </div>
         </div>
-        
+
         <!-- 用户信息卡片 -->
         <div v-show="!isCollapse" class="user-card">
           <div class="user-avatar">
@@ -28,46 +28,44 @@
             <div class="user-role">系统管理员</div>
           </div>
         </div>
-        
+
         <!-- 菜单分组 -->
         <div class="menu-section">
           <div v-show="!isCollapse" class="menu-group-title">Overview</div>
-          <el-menu
-            :default-active="activeMenu"
-            :collapse="isCollapse"
-            :unique-opened="true"
-            router
-            class="sidebar-menu"
-          >
+          <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true" router
+            class="sidebar-menu">
             <el-menu-item index="/dashboard" class="menu-item-custom">
-              <el-icon><Odometer /></el-icon>
+              <el-icon>
+                <Odometer />
+              </el-icon>
               <span>首页仪表盘</span>
             </el-menu-item>
-            
+
             <el-menu-item index="/students" class="menu-item-custom">
-              <el-icon><User /></el-icon>
+              <el-icon>
+                <User />
+              </el-icon>
               <span>学生管理</span>
             </el-menu-item>
           </el-menu>
         </div>
-        
+
         <!-- 系统管理分组 -->
         <div class="menu-section">
           <div v-show="!isCollapse" class="menu-group-title">Settings</div>
-          <el-menu
-            :default-active="activeMenu"
-            :collapse="isCollapse"
-            :unique-opened="true"
-            router
-            class="sidebar-menu"
-          >
+          <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true" router
+            class="sidebar-menu">
             <el-menu-item index="/profile" class="menu-item-custom">
-              <el-icon><UserFilled /></el-icon>
+              <el-icon>
+                <UserFilled />
+              </el-icon>
               <span>个人中心</span>
             </el-menu-item>
-            
+
             <el-menu-item index="/settings" class="menu-item-custom">
-              <el-icon><Tools /></el-icon>
+              <el-icon>
+                <Tools />
+              </el-icon>
               <span>系统设置</span>
             </el-menu-item>
           </el-menu>
@@ -79,53 +77,50 @@
         <!-- 头部 -->
         <el-header class="header">
           <div class="header-left">
-            <el-button
-              type="text"
-              @click="toggleSidebar"
-              class="collapse-btn"
-            >
+            <el-button type="text" @click="toggleSidebar" class="collapse-btn">
               <el-icon size="20">
                 <component :is="isCollapse ? 'Expand' : 'Fold'" />
               </el-icon>
             </el-button>
-            
+
             <el-breadcrumb separator="/" class="breadcrumb">
               <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path">
                 {{ item.title }}
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          
+
           <div class="header-right">
             <!-- 搜索框 -->
             <div class="search-box">
-              <el-input
-                v-model="searchKeyword"
-                placeholder="搜索学生..."
-                class="modern-input"
-                clearable
-                @keyup.enter="handleGlobalSearch"
-              >
+              <el-input v-model="searchKeyword" placeholder="搜索学生..." class="modern-input" clearable
+                @keyup.enter="handleGlobalSearch">
                 <template #prefix>
-                  <el-icon><Search /></el-icon>
+                  <el-icon>
+                    <Search />
+                  </el-icon>
                 </template>
               </el-input>
             </div>
-            
+
             <!-- 通知 -->
             <el-badge :value="notifications" class="notification-badge" type="danger">
               <div class="action-icon" @click="showNotifications">
-                <el-icon size="20"><Bell /></el-icon>
+                <el-icon size="20">
+                  <Bell />
+                </el-icon>
               </div>
             </el-badge>
-            
+
             <!-- 用户信息 -->
             <el-dropdown @command="handleUserCommand" class="user-dropdown" trigger="click">
               <div class="user-info">
                 <el-avatar :size="32" :src="userInfo?.avatar">
                   {{ userInfo?.name?.charAt(0) }}
                 </el-avatar>
-                <el-icon size="14" class="dropdown-icon"><ArrowDown /></el-icon>
+                <el-icon size="14" class="dropdown-icon">
+                  <ArrowDown />
+                </el-icon>
               </div>
               <template #dropdown>
                 <el-dropdown-menu class="modern-dropdown">
@@ -134,13 +129,19 @@
                     <span class="dropdown-email">{{ userInfo?.email || 'admin@example.com' }}</span>
                   </div>
                   <el-dropdown-item command="profile">
-                    <el-icon><User /></el-icon>个人中心
+                    <el-icon>
+                      <User />
+                    </el-icon>个人中心
                   </el-dropdown-item>
                   <el-dropdown-item command="settings">
-                    <el-icon><Setting /></el-icon>系统设置
+                    <el-icon>
+                      <Setting />
+                    </el-icon>系统设置
                   </el-dropdown-item>
                   <el-dropdown-item command="logout" divided class="text-danger">
-                    <el-icon><SwitchButton /></el-icon>退出登录
+                    <el-icon>
+                      <SwitchButton />
+                    </el-icon>退出登录
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -163,34 +164,35 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import faviconIcon from '../assets/favicon.ico'
 import {
-  School, Odometer, User, Setting, UserFilled, Tools,
+  Odometer, User, Setting, UserFilled, Tools,
   Expand, Fold, Search, Bell, ArrowDown, SwitchButton
 } from '@element-plus/icons-vue'
 
 export default {
   name: 'Layout',
   components: {
-    School, Odometer, User, Setting, UserFilled, Tools,
+    Odometer, User, Setting, UserFilled, Tools,
     Expand, Fold, Search, Bell, ArrowDown, SwitchButton
   },
   setup() {
     const route = useRoute()
     const router = useRouter()
-    
+
     const isCollapse = ref(false)
     const searchKeyword = ref('')
     const notifications = ref(3)
-    
+
     const userInfo = computed(() => {
       const user = localStorage.getItem('user')
       return user ? JSON.parse(user) : null
     })
-    
+
     const activeMenu = computed(() => {
       return route.path
     })
-    
+
     const breadcrumbs = computed(() => {
       const breadcrumbMap = {
         '/dashboard': [{ title: '首页', path: '/dashboard' }],
@@ -200,11 +202,11 @@ export default {
       }
       return breadcrumbMap[route.path] || []
     })
-    
+
     const toggleSidebar = () => {
       isCollapse.value = !isCollapse.value
     }
-    
+
     const handleGlobalSearch = () => {
       if (searchKeyword.value.trim()) {
         router.push({
@@ -214,12 +216,12 @@ export default {
         searchKeyword.value = ''
       }
     }
-    
+
     const showNotifications = () => {
       ElMessage.info('暂无新通知')
       notifications.value = 0
     }
-    
+
     const handleUserCommand = async (command) => {
       switch (command) {
         case 'profile':
@@ -233,7 +235,7 @@ export default {
           break
       }
     }
-    
+
     const handleLogout = async () => {
       try {
         await ElMessageBox.confirm(
@@ -245,7 +247,7 @@ export default {
             cancelButtonText: '取消'
           }
         )
-        
+
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         ElMessage.success('退出登录成功')
@@ -254,8 +256,9 @@ export default {
         // 取消退出
       }
     }
-    
+
     return {
+      faviconIcon,
       isCollapse,
       searchKeyword,
       notifications,
@@ -314,14 +317,19 @@ export default {
 }
 
 .logo-icon {
-  width: 32px;
-  height: 32px;
-  background-color: #3b82f6;
-  border-radius: 8px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  flex-shrink: 0;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .logo-title {
@@ -431,6 +439,7 @@ export default {
 .sidebar.el-aside--collapsed .menu-group-title {
   display: none;
 }
+
 .sidebar.el-aside--collapsed .logo-section {
   padding: 0;
   justify-content: center;
@@ -468,6 +477,7 @@ export default {
   color: #6b7280;
   font-weight: 400;
 }
+
 .breadcrumb :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner) {
   color: #111827;
   font-weight: 500;
@@ -585,12 +595,15 @@ export default {
   .header {
     padding: 0 16px;
   }
+
   .breadcrumb {
     display: none;
   }
+
   .search-box {
     display: none;
   }
+
   .main-content {
     padding: 16px;
   }
