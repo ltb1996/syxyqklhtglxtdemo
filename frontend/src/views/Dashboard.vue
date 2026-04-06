@@ -1,227 +1,185 @@
 <template>
   <div class="dashboard">
-    <!-- 顶部欢迎区域 -->
+    <!-- 顶部欢迎区域 - 极简排版 -->
     <div class="welcome-section">
-      <div class="welcome-content">
-        <div class="welcome-text">
-          <h1>欢迎回来，{{ userInfo?.name }}</h1>
-          <p>{{ currentDate }}，大学生信息管理系统运行正常</p>
+      <div class="welcome-text">
+        <h1 class="page-title">Overview</h1>
+        <p class="page-subtitle">{{ currentDate }} · Welcome back, {{ userInfo?.name }}</p>
+      </div>
+      <div class="welcome-actions">
+        <el-button type="primary" class="primary-btn" @click="showAddStudent = true">
+          <el-icon>
+            <Plus />
+          </el-icon>添加学生
+        </el-button>
+        <el-button class="secondary-btn" @click="exportData">
+          导出报表
+        </el-button>
+      </div>
+    </div>
+
+    <!-- 关键指标卡片 -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Total Students</span>
+          <el-icon class="metric-icon">
+            <User />
+          </el-icon>
         </div>
-        <div class="welcome-avatar">
-          <div class="avatar-container">
-            <el-avatar :size="80" :src="userInfo?.avatar" class="user-avatar">
-              {{ userInfo?.name?.charAt(0) }}
-            </el-avatar>
-            <div class="avatar-badge">
-              <el-icon><Check /></el-icon>
-            </div>
-          </div>
+        <div class="metric-value">{{ statistics.total || 0 }}</div>
+        <div class="metric-trend positive">
+          <span class="trend-value">+{{ getNewStudents() }}</span>
+          <span class="trend-label">本月新增</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Active Students</span>
+          <el-icon class="metric-icon">
+            <Check />
+          </el-icon>
+        </div>
+        <div class="metric-value">{{ getActiveStudents() }}</div>
+        <div class="metric-trend neutral">
+          <span class="trend-value">{{ getGraduateStudents() }}</span>
+          <span class="trend-label">即将毕业</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Average GPA</span>
+          <el-icon class="metric-icon">
+            <Trophy />
+          </el-icon>
+        </div>
+        <div class="metric-value">{{ statistics.avgGpa || '0.0' }}</div>
+        <div class="metric-trend positive">
+          <span class="trend-value">{{ statistics.excellentCount || 0 }}</span>
+          <span class="trend-label">优秀 (≥3.7)</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Colleges & Degrees</span>
+          <el-icon class="metric-icon">
+            <School />
+          </el-icon>
+        </div>
+        <div class="metric-value">{{ statistics.byCollege?.length || 0 }}</div>
+        <div class="metric-trend neutral">
+          <span class="trend-value">{{ statistics.byDegree?.length || 0 }}</span>
+          <span class="trend-label">个学历层次</span>
         </div>
       </div>
     </div>
 
-    <!-- 统计卡片 -->
-    <div class="stats-grid">
-      <div class="stat-card total-students">
-        <div class="stat-icon">
-          <el-icon size="40"><User /></el-icon>
-        </div>
-        <div class="stat-content">
-          <h3>{{ statistics.total || 0 }}</h3>
-          <p>总学生数</p>
-          <span class="stat-trend">+{{ getNewStudents() }} 本月新增</span>
-        </div>
-      </div>
-      
-      <div class="stat-card colleges-stats">
-        <div class="stat-icon">
-          <el-icon size="40"><School /></el-icon>
-        </div>
-        <div class="stat-content">
-          <h3>{{ statistics.byCollege?.length || 0 }}</h3>
-          <p>学院数量</p>
-          <span class="stat-trend">{{ statistics.byDegree?.length || 0 }} 个学历层次</span>
-        </div>
-      </div>
-      
-      <div class="stat-card gpa-stats">
-        <div class="stat-icon">
-          <el-icon size="40"><Trophy /></el-icon>
-        </div>
-        <div class="stat-content">
-          <h3>{{ statistics.avgGpa || '0.0' }}</h3>
-          <p>平均GPA</p>
-          <span class="stat-trend">{{ statistics.excellentCount || 0 }} 人优秀(≥3.7)</span>
-        </div>
-      </div>
-      
-      <div class="stat-card active-students">
-        <div class="stat-icon">
-          <el-icon size="40"><Check /></el-icon>
-        </div>
-        <div class="stat-content">
-          <h3>{{ getActiveStudents() }}</h3>
-          <p>在读学生</p>
-          <span class="stat-trend">{{ getGraduateStudents() }} 人即将毕业</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 图表和表格区域 -->
-    <div class="content-grid">
-      <!-- 学院分布图表 -->
-      <div class="chart-card">
-        <div class="card-header">
-          <h3>学院分布统计</h3>
-          <el-icon><PieChart /></el-icon>
-        </div>
-        <div class="chart-content">
-          <div class="college-chart">
-            <div v-for="college in statistics.byCollege" :key="college._id" class="college-item">
-              <div class="college-bar">
-                <div 
-                  class="college-fill" 
-                  :style="{ 
-                    width: (college.count / statistics.total * 100) + '%',
-                    background: getCollegeColor(college._id)
-                  }"
-                ></div>
-              </div>
-              <div class="college-info">
-                <span class="college-name">{{ college._id }}</span>
-                <span class="college-count">{{ college.count }}人</span>
-                <span class="college-percent">{{ ((college.count / statistics.total) * 100).toFixed(1) }}%</span>
-              </div>
+    <!-- 内容区域 -->
+    <div class="content-layout">
+      <!-- 左侧：图表与列表 -->
+      <div class="main-column">
+        <!-- 图表双列布局 -->
+        <div class="charts-row">
+          <div class="panel college-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">学院分布</h3>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 年级分布 -->
-      <div class="chart-card">
-        <div class="card-header">
-          <h3>年级分布统计</h3>
-          <el-icon><DataAnalysis /></el-icon>
-        </div>
-        <div class="chart-content">
-          <div class="grade-chart">
-            <div v-for="grade in statistics.byGrade" :key="grade._id" class="grade-item">
-              <div class="grade-bar">
-                <div 
-                  class="grade-fill" 
-                  :style="{ 
-                    height: (grade.count / getMaxGradeCount() * 100) + '%',
-                    background: getGradeColor(grade._id)
-                  }"
-                ></div>
-              </div>
-              <div class="grade-info">
-                <span class="grade-name">{{ grade._id }}</span>
-                <span class="grade-count">{{ grade.count }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 最近添加的学生 -->
-      <div class="recent-card">
-        <div class="card-header">
-          <h3>最近添加学生</h3>
-          <el-button type="primary" size="small" @click="$router.push('/students')">
-            查看全部
-          </el-button>
-        </div>
-        <div class="recent-content">
-          <div v-if="recentStudents.length === 0" class="empty-state">
-            <el-icon size="60" color="#c0c4cc"><Document /></el-icon>
-            <p>暂无学生数据</p>
-          </div>
-          <div v-else class="student-list">
-            <div v-for="student in recentStudents" :key="student._id" class="student-item">
-              <el-avatar :size="45">{{ student.name.charAt(0) }}</el-avatar>
-              <div class="student-info">
-                <h4>{{ student.name }}</h4>
-                <p>{{ student.college }}</p>
-                <p>{{ student.major }} · {{ student.grade }}</p>
-              </div>
-              <div class="student-meta">
-                <el-tag :type="getStatusType(student.status)" size="small">
-                  {{ student.status }}
-                </el-tag>
-                <div class="gpa-info">
-                  <span class="gpa-label">GPA:</span>
-                  <span class="gpa-value" :class="getGpaClass(student.academicInfo?.gpa)">
-                    {{ student.academicInfo?.gpa || 'N/A' }}
-                  </span>
+            <div class="panel-body">
+              <div class="simple-bar-chart">
+                <div v-for="college in statistics.byCollege" :key="college._id" class="bar-row">
+                  <div class="bar-label">
+                    <span class="label-name">{{ college._id }}</span>
+                    <span class="label-value">{{ college.count }}</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" :style="{ width: (college.count / statistics.total * 100) + '%' }"></div>
+                  </div>
                 </div>
-                <span class="add-time">{{ formatDate(student.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel scholarship-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">奖学金概览</h3>
+            </div>
+            <div class="panel-body flex-center">
+              <div class="scholarship-summary">
+                <div class="award-item">
+                  <div class="award-dot nat"></div>
+                  <div class="award-info">
+                    <div class="award-name">国家级奖学金</div>
+                    <div class="award-count">{{ statistics.scholarships?.['国家级'] || 0 }}</div>
+                  </div>
+                </div>
+                <div class="award-item">
+                  <div class="award-dot pro"></div>
+                  <div class="award-info">
+                    <div class="award-name">省级奖学金</div>
+                    <div class="award-count">{{ statistics.scholarships?.['省级'] || 0 }}</div>
+                  </div>
+                </div>
+                <div class="award-item">
+                  <div class="award-dot sch"></div>
+                  <div class="award-info">
+                    <div class="award-name">校级奖学金</div>
+                    <div class="award-count">{{ statistics.scholarships?.['校级'] || 0 }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 年级分布（简化为水平柱状或纯数字） -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">各年级在读人数</h3>
+          </div>
+          <div class="panel-body">
+            <div class="grade-stats-grid">
+              <div v-for="grade in statistics.byGrade" :key="grade._id" class="grade-stat-box">
+                <div class="grade-count">{{ grade.count }}</div>
+                <div class="grade-name">{{ grade._id }}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 奖学金统计 -->
-      <div class="scholarship-card">
-        <div class="card-header">
-          <h3>奖学金统计</h3>
-          <el-icon><Medal /></el-icon>
-        </div>
-        <div class="scholarship-content">
-          <div class="scholarship-stats">
-            <div class="scholarship-item">
-              <div class="scholarship-icon national">
-                <el-icon><GoldMedal /></el-icon>
-              </div>
-              <div class="scholarship-info">
-                <h4>{{ statistics.scholarships?.['国家级'] || 0 }}</h4>
-                <p>国家级奖学金</p>
-              </div>
+      <!-- 右侧：最近动态 -->
+      <div class="side-column">
+        <div class="panel recent-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">最近加入</h3>
+            <el-button type="text" class="text-link" @click="$router.push('/students')">全部</el-button>
+          </div>
+          <div class="panel-body p-0">
+            <div v-if="recentStudents.length === 0" class="empty-state">
+              <span class="empty-text">No recent students</span>
             </div>
-            <div class="scholarship-item">
-              <div class="scholarship-icon provincial">
-                <el-icon><Star /></el-icon>
-              </div>
-              <div class="scholarship-info">
-                <h4>{{ statistics.scholarships?.['省级'] || 0 }}</h4>
-                <p>省级奖学金</p>
-              </div>
-            </div>
-            <div class="scholarship-item">
-              <div class="scholarship-icon school">
-                <el-icon><Trophy /></el-icon>
-              </div>
-              <div class="scholarship-info">
-                <h4>{{ statistics.scholarships?.['校级'] || 0 }}</h4>
-                <p>校级奖学金</p>
+            <div v-else class="feed-list">
+              <div v-for="student in recentStudents" :key="student._id" class="feed-item">
+                <el-avatar :size="36" class="feed-avatar">{{ student.name.charAt(0) }}</el-avatar>
+                <div class="feed-content">
+                  <div class="feed-title">
+                    <span class="feed-name">{{ student.name }}</span>
+                    <span class="feed-status" :class="getStatusClass(student.status)">{{ student.status }}</span>
+                  </div>
+                  <div class="feed-meta">
+                    {{ student.college }} · {{ student.major }}
+                  </div>
+                </div>
+                <div class="feed-gpa" v-if="student.academicInfo?.gpa">
+                  {{ student.academicInfo.gpa }}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- 快速操作区域 -->
-    <div class="quick-actions">
-      <h3>快速操作</h3>
-      <div class="action-buttons">
-        <el-button type="primary" size="large" @click="$router.push('/students')">
-          <el-icon><User /></el-icon>
-          学生管理
-        </el-button>
-        <el-button type="success" size="large" @click="showAddStudent = true">
-          <el-icon><Plus /></el-icon>
-          添加学生
-        </el-button>
-        <el-button type="info" size="large" @click="exportData">
-          <el-icon><Download /></el-icon>
-          导出数据
-        </el-button>
-        <el-button type="warning" size="large" @click="$router.push('/settings')">
-          <el-icon><Setting /></el-icon>
-          系统设置
-        </el-button>
       </div>
     </div>
   </div>
@@ -231,8 +189,8 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getStatistics, getStudents } from '../api'
-import { 
-  User, School, Check, Plus, PieChart, Document, 
+import {
+  User, School, Check, Plus, PieChart, Document,
   Download, Setting, Trophy, Star, GoldMedal, Medal,
   DataAnalysis
 } from '@element-plus/icons-vue'
@@ -255,129 +213,86 @@ export default {
       excellentCount: 0,
       scholarships: {}
     })
-    
+
     const recentStudents = ref([])
     const showAddStudent = ref(false)
-    
+
     const userInfo = computed(() => {
       const user = localStorage.getItem('user')
       return user ? JSON.parse(user) : { name: '管理员' }
     })
-    
+
     const currentDate = computed(() => {
-      return new Date().toLocaleDateString('zh-CN', {
+      return new Date().toLocaleDateString('en-US', {
         year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long'
+        month: 'short',
+        day: 'numeric'
       })
     })
-    
+
     // 获取统计数据
     const fetchStatistics = async () => {
       try {
         const response = await getStatistics()
         Object.assign(statistics, response.data);
-        console.log(statistics.scholarships, '444444444444444444444444444444444444444');
       } catch (error) {
         console.error('获取统计数据失败:', error)
       }
     }
-    
+
     // 获取最近学生
     const fetchRecentStudents = async () => {
       try {
-        const response = await getStudents({ 
-          page: 1, 
-          limit: 5, 
+        const response = await getStudents({
+          page: 1,
+          limit: 5,
           sort: 'createdAt',
-          order: 'desc' 
+          order: 'desc'
         })
         recentStudents.value = response.data.students || []
       } catch (error) {
         console.error('获取最近学生失败:', error)
       }
     }
-    
+
     const getActiveStudents = () => {
       const activeStatus = statistics.byStatus.find(s => s._id === '在读')
       return activeStatus ? activeStatus.count : 0
     }
-    
+
     const getGraduateStudents = () => {
       const currentYear = new Date().getFullYear()
-      return recentStudents.value.filter(student => 
+      return recentStudents.value.filter(student =>
         student.expectedGraduationYear === currentYear
       ).length
     }
-    
+
     const getNewStudents = () => {
       const currentMonth = new Date().getMonth()
       const currentYear = new Date().getFullYear()
       return recentStudents.value.filter(student => {
         const createdDate = new Date(student.createdAt)
-        return createdDate.getMonth() === currentMonth && 
-               createdDate.getFullYear() === currentYear
+        return createdDate.getMonth() === currentMonth &&
+          createdDate.getFullYear() === currentYear
       }).length
     }
-    
-    const getMaxGradeCount = () => {
-      return Math.max(...statistics.byGrade.map(g => g.count), 1)
+
+    const getStatusClass = (status) => {
+      if (status === '在读') return 'status-active';
+      if (status === '休学' || status === '延期毕业') return 'status-warning';
+      if (status === '退学') return 'status-error';
+      return 'status-neutral';
     }
-    
-    const getCollegeColor = (college) => {
-      const colors = [
-        '#409eff', '#67c23a', '#e6a23c', '#f56c6c', 
-        '#909399', '#c71585', '#ff6347', '#32cd32'
-      ]
-      const index = college.length % colors.length
-      return colors[index]
-    }
-    
-    const getGradeColor = (grade) => {
-      const gradeColors = {
-        '大一': '#67c23a',
-        '大二': '#409eff', 
-        '大三': '#e6a23c',
-        '大四': '#f56c6c',
-        '研一': '#909399',
-        '研二': '#c71585',
-        '研三': '#ff6347'
-      }
-      return gradeColors[grade] || '#409eff'
-    }
-    
-    const getStatusType = (status) => {
-      const statusTypes = {
-        '在读': 'success',
-        '休学': 'warning',
-        '退学': 'danger',
-        '毕业': 'info',
-        '延期毕业': 'warning'
-      }
-      return statusTypes[status] || 'info'
-    }
-    
-    const getGpaClass = (gpa) => {
-      if (!gpa) return 'gpa-na'
-      if (gpa >= 3.7) return 'gpa-excellent'
-      if (gpa >= 3.0) return 'gpa-good'
-      return 'gpa-normal'
-    }
-    
-    const formatDate = (dateString) => {
-      return new Date(dateString).toLocaleDateString('zh-CN')
-    }
-    
+
     const exportData = () => {
       ElMessage.info('导出功能开发中...')
     }
-    
+
     onMounted(() => {
       fetchStatistics()
       fetchRecentStudents()
     })
-    
+
     return {
       statistics,
       recentStudents,
@@ -387,12 +302,7 @@ export default {
       getActiveStudents,
       getGraduateStudents,
       getNewStudents,
-      getMaxGradeCount,
-      getCollegeColor,
-      getGradeColor,
-      getStatusType,
-      getGpaClass,
-      formatDate,
+      getStatusClass,
       exportData
     }
   }
@@ -401,449 +311,421 @@ export default {
 
 <style scoped>
 .dashboard {
-  padding: 20px;
-  background: #f5f7fa;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/* 欢迎区域 */
+/* 顶部标题区域 */
 .welcome-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 30px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.welcome-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  margin-bottom: 8px;
 }
 
-.welcome-text h1 {
-  margin: 0 0 8px 0;
-  font-size: 28px;
+.page-title {
+  margin: 0 0 4px 0;
+  font-size: 24px;
   font-weight: 600;
+  color: #111827;
+  letter-spacing: -0.02em;
   text-align: left;
 }
 
-.welcome-text p {
+.page-subtitle {
   margin: 0;
-  opacity: 0.9;
-  font-size: 16px;
+  font-size: 14px;
+  color: #6b7280;
 }
 
-.avatar-container {
-  position: relative;
-}
-
-.user-avatar {
-  border: 3px solid rgba(255, 255, 255, 0.3);
-}
-
-.avatar-badge {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 24px;
-  height: 24px;
-  background: #67c23a;
-  border-radius: 50%;
+.welcome-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
+  gap: 12px;
 }
 
-/* 统计卡片 */
-.stats-grid {
+.primary-btn {
+  background-color: #111827;
+  border-color: #111827;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.primary-btn:hover {
+  background-color: #374151;
+  border-color: #374151;
+}
+
+.secondary-btn {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* 关键指标卡片 */
+.metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
-  margin-bottom: 20px;
 }
 
-.stat-card {
+.metric-card {
   background: white;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
   display: flex;
-  align-items: center;
-  gap: 20px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.2s;
 }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #409eff, #67c23a);
+.metric-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-.stat-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+.metric-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  color: #409eff;
 }
 
-.stat-content {
-  flex: 1;
+.metric-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-.stat-content h3 {
-  margin: 0 0 8px 0;
+.metric-icon {
+  color: #9ca3af;
+  font-size: 18px;
+}
+
+.metric-value {
   font-size: 32px;
   font-weight: 700;
-  color: #303133;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.stat-content p {
-  margin: 0 0 4px 0;
-  color: #606266;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.stat-trend {
-  font-size: 12px;
-  color: #909399;
-}
-
-/* 内容网格 */
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.chart-card,
-.recent-card,
-.scholarship-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-.card-header {
-  padding: 20px 25px;
-  border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-header h3 {
-  margin: 0;
-  color: #303133;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* 学院分布图表 */
-.college-chart {
-  padding: 20px 25px;
-}
-
-.college-item {
-  margin-bottom: 100px;
-}
-
-.college-item:last-child {
-  margin-bottom: 0px;
-}
-
-.college-bar {
-  height: 15px;
-  background: #f5f7fa;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-
-.college-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.8s ease;
-}
-
-.college-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
-
-.college-name {
-  color: #303133;
-  font-weight: 500;
-}
-
-.college-count {
-  color: #606266;
-}
-
-.college-percent {
-  color: #909399;
-  font-size: 12px;
-}
-
-/* 年级分布图表 */
-.grade-chart {
-  /* padding: 20px 25px; */
-  display: flex;
-  justify-content: space-around;
-  align-items: end;
-  height: 350px;
-}
-
-.grade-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.grade-bar {
-  width: 30px;
-  height: 280px;
-  background: #f5f7fa;
-  border-radius: 15px;
-  display: flex;
-  align-items: end;
-  overflow: hidden;
-}
-
-.grade-fill {
-  width: 100%;
-  border-radius: 15px;
-  transition: height 0.8s ease;
-  min-height: 4px;
-}
-
-.grade-info {
-  text-align: center;
-}
-
-.grade-name {
-  display: block;
-  font-size: 12px;
-  color: #606266;
-  margin-bottom: 2px;
-}
-
-.grade-count {
-  display: block;
-  font-size: 14px;
-  color: #303133;
-  font-weight: 600;
-}
-
-/* 最近学生列表 */
-.recent-content {
-  padding: 20px 25px;
-}
-
-.student-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.student-item {
+.metric-trend {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 12px;
-  background: #f8f9fa;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.student-item:hover {
-  background: #e3f2fd;
-  transform: translateX(4px);
-}
-
-.student-info {
-  flex: 1;
-}
-
-.student-info h4 {
-  margin: 0 0 4px 0;
-  color: #303133;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.student-info p {
-  margin: 0 0 2px 0;
-  color: #606266;
+  gap: 6px;
   font-size: 13px;
 }
 
-.student-meta {
-  text-align: right;
-}
-
-.gpa-info {
-  margin: 4px 0;
-}
-
-.gpa-label {
-  font-size: 12px;
-  color: #909399;
-}
-
-.gpa-value {
-  font-size: 14px;
-  font-weight: 600;
-  margin-left: 4px;
-}
-
-.gpa-excellent { color: #67c23a; }
-.gpa-good { color: #e6a23c; }
-.gpa-normal { color: #f56c6c; }
-.gpa-na { color: #909399; }
-
-.add-time {
-  font-size: 12px;
-  color: #c0c4cc;
-}
-
-/* 奖学金统计 */
-.scholarship-content {
-  padding: 20px 25px;
-}
-
-.scholarship-stats {
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
-}
-
-.scholarship-item {
-  text-align: center;
-  flex: 1;
-}
-
-.scholarship-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-  color: white;
-  font-size: 24px;
-}
-
-.scholarship-icon.national {
-  background: linear-gradient(135deg, #ffd700, #ffb347);
-}
-
-.scholarship-icon.provincial {
-  background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
-}
-
-.scholarship-icon.school {
-  background: linear-gradient(135deg, #cd7f32, #b8860b);
-}
-
-.scholarship-info h4 {
-  margin: 0 0 4px 0;
-  font-size: 24px;
-  font-weight: 700;
-  color: #303133;
-}
-
-.scholarship-info p {
-  margin: 0;
-  font-size: 14px;
-  color: #606266;
-}
-
-/* 快速操作 */
-.quick-actions {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.quick-actions h3 {
-  margin: 0 0 20px 0;
-  color: #303133;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.action-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-}
-
-.action-buttons .el-button {
-  height: 60px;
-  font-size: 16px;
+.metric-trend.positive .trend-value {
+  color: #10b981;
   font-weight: 500;
 }
 
-/* 空状态 */
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: #c0c4cc;
+.metric-trend.neutral .trend-value {
+  color: #6b7280;
+  font-weight: 500;
 }
 
-.empty-state p {
-  margin: 10px 0 0 0;
-  font-size: 14px;
+.trend-label {
+  color: #9ca3af;
 }
 
-/* 响应式设计 */
+/* 内容区域布局 */
+.content-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .content-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
 @media (max-width: 768px) {
-  .dashboard {
-    padding: 10px;
-  }
-  
-  .welcome-content {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-  
-  .stats-grid {
+  .charts-row {
     grid-template-columns: 1fr;
   }
-  
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .action-buttons {
-    grid-template-columns: 1fr;
-  }
+}
+
+/* 面板通用样式 */
+.panel {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.panel-body {
+  padding: 20px;
+}
+
+.panel-body.p-0 {
+  padding: 0;
+}
+
+.panel-body.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.text-link {
+  font-size: 13px;
+  color: #3b82f6;
+  padding: 0;
+}
+
+/* 学院分布简易柱状图 */
+.simple-bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.label-name {
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.label-value {
+  color: #111827;
+  font-weight: 600;
+}
+
+.bar-track {
+  height: 6px;
+  background-color: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 3px;
+}
+
+/* 奖学金概览 */
+.scholarship-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 240px;
+}
+
+.award-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.award-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.award-dot.nat {
+  background-color: #fbbf24;
+}
+
+.award-dot.pro {
+  background-color: #9ca3af;
+}
+
+.award-dot.sch {
+  background-color: #d97706;
+}
+
+.award-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.award-name {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.award-count {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* 年级网格 */
+.grade-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 16px;
+}
+
+.grade-stat-box {
+  background-color: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.grade-count {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.grade-name {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* 最近动态列表 */
+.feed-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.feed-item:last-child {
+  border-bottom: none;
+}
+
+.feed-avatar {
+  background-color: #e5e7eb;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.feed-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.feed-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-status {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-neutral {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.feed-meta {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.feed-gpa {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  background-color: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-text {
+  color: #9ca3af;
+  font-size: 14px;
 }
 </style>

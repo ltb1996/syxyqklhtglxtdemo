@@ -1,15 +1,18 @@
 # 学生信息后台管理系统
 
 ## 项目简介
+
 这是一个基于Node.js + MongoDB + Vue3的学生信息后台管理系统，主要用于管理学生的基本信息、学籍信息、成绩信息等。
 
 ## 技术栈
+
 - **后端**: Node.js + Express.js + Mongoose
 - **数据库**: MongoDB
 - **前端**: Vue3 + Vite + Element Plus
 - **开发工具**: Nodemon, ESLint, Prettier
 
-## 项目结构 
+## 项目结构
+
 syxyqklhtglxtdemo/
 ├── backend/ # 后端代码
 │ ├── config/ # 配置文件
@@ -31,7 +34,8 @@ syxyqklhtglxtdemo/
 │ ├── public/ # 静态资源
 │ └── package.json # 依赖配置
 └── README.md # 项目说明
-```
+
+````
 
 ## 功能特性
 
@@ -71,9 +75,10 @@ syxyqklhtglxtdemo/
 cd backend
 npm install
 npm run dev
-```
+````
 
 ### 前端启动
+
 ```bash
 cd frontend
 npm install
@@ -83,6 +88,7 @@ npm run dev
 ## API接口文档
 
 ### 学生信息接口
+
 - `GET /api/students` - 获取学生列表
 - `GET /api/students/:id` - 获取单个学生信息
 - `POST /api/students` - 创建学生信息
@@ -90,23 +96,26 @@ npm run dev
 - `DELETE /api/students/:id` - 删除学生信息
 
 ### 用户认证接口
+
 - `POST /api/auth/login` - 用户登录
 - `POST /api/auth/logout` - 用户登出
 - `GET /api/auth/profile` - 获取用户信息
 
 ## 开发注意事项
+
 1. 所有接口都有完整的错误处理和日志记录
 2. 数据库操作使用事务确保数据一致性
 3. 前端使用响应式设计，支持多种设备
 4. 代码遵循ESLint规范，保持良好的代码风格
 
 ## 版本历史
+
 - v1.0.0 - 初始版本，基本的学生信息管理功能
-│ │ ├── views/ # 页面
-│ │ ├── router/ # 路由
-│ │ ├── store/ # 状态管理
-│ │ ├── api/ # API接口
-│ │ └── utils/ # 工具函数
-│ ├── public/ # 静态资源
-│ └── package.json # 依赖配置
-└── README.md # 项目说明
+  │ │ ├── views/ # 页面
+  │ │ ├── router/ # 路由
+  │ │ ├── store/ # 状态管理
+  │ │ ├── api/ # API接口
+  │ │ └── utils/ # 工具函数
+  │ ├── public/ # 静态资源
+  │ └── package.json # 依赖配置
+  └── README.md # 项目说明
