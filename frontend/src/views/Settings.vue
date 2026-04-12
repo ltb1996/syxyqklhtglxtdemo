@@ -3,19 +3,19 @@
     <!-- 页面头部 -->
     <div class="page-header">
       <div class="header-content">
-        <h1 class="page-title">System Settings</h1>
-        <p class="page-subtitle">Manage system configuration and global parameters</p>
+        <h1 class="page-title">系统设置</h1>
+        <p class="page-subtitle">管理系统配置和全局参数</p>
       </div>
       <div class="header-actions">
         <el-button class="secondary-btn" @click="resetSettings">
           <el-icon>
             <Refresh />
-          </el-icon>Reset Defaults
+          </el-icon>恢复默认
         </el-button>
         <el-button type="primary" class="primary-btn" @click="saveSettings" :loading="saving">
           <el-icon>
             <Check />
-          </el-icon>Save Settings
+          </el-icon>保存设置
         </el-button>
       </div>
     </div>
@@ -24,28 +24,28 @@
     <div class="content-panel">
       <el-tabs v-model="activeTab" class="modern-tabs">
         <!-- 基本设置 -->
-        <el-tab-pane label="Basic Settings" name="basic">
+        <el-tab-pane label="基本设置" name="basic">
           <div class="setting-group">
-            <h3 class="group-title">System Information</h3>
+            <h3 class="group-title">系统信息</h3>
             <div class="setting-grid">
               <div class="setting-item">
-                <label class="setting-label">System Name</label>
-                <el-input v-model="basicSettings.systemName" placeholder="Enter system name" class="modern-input" />
+                <label class="setting-label">系统名称</label>
+                <el-input v-model="basicSettings.systemName" placeholder="请输入系统名称" class="modern-input" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Version</label>
+                <label class="setting-label">版本号</label>
                 <el-input v-model="basicSettings.version" disabled class="modern-input is-readonly" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Admin Email</label>
+                <label class="setting-label">管理员邮箱</label>
                 <el-input v-model="basicSettings.adminEmail" placeholder="admin@example.com" class="modern-input" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">System Status</label>
+                <label class="setting-label">系统状态</label>
                 <div class="setting-control-row">
                   <el-switch v-model="basicSettings.systemStatus" class="modern-switch" />
                   <span class="status-text" :class="basicSettings.systemStatus ? 'text-success' : 'text-warning'">
-                    {{ basicSettings.systemStatus ? 'Active' : 'Maintenance Mode' }}
+                    {{ basicSettings.systemStatus ? '运行中' : '维护模式' }}
                   </span>
                 </div>
               </div>
@@ -55,27 +55,27 @@
           <div class="setting-divider"></div>
 
           <div class="setting-group">
-            <h3 class="group-title">Data Preferences</h3>
+            <h3 class="group-title">数据偏好</h3>
             <div class="setting-grid">
               <div class="setting-item">
-                <label class="setting-label">Items Per Page</label>
+                <label class="setting-label">每页显示条数</label>
                 <el-select v-model="basicSettings.pageSize" class="modern-input" style="width: 100%">
-                  <el-option label="10 Items" :value="10" />
-                  <el-option label="20 Items" :value="20" />
-                  <el-option label="50 Items" :value="50" />
-                  <el-option label="100 Items" :value="100" />
+                  <el-option label="10 条" :value="10" />
+                  <el-option label="20 条" :value="20" />
+                  <el-option label="50 条" :value="50" />
+                  <el-option label="100 条" :value="100" />
                 </el-select>
               </div>
               <div class="setting-item">
-                <label class="setting-label">Data Retention (Days)</label>
+                <label class="setting-label">数据保留天数</label>
                 <el-input-number v-model="basicSettings.dataRetentionDays" :min="30" :max="365"
                   controls-position="right" class="modern-input-number" style="width: 100%" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Automatic Backup</label>
+                <label class="setting-label">自动备份</label>
                 <div class="setting-control-row">
                   <el-switch v-model="basicSettings.autoBackup" class="modern-switch" />
-                  <span class="setting-desc">Run daily database backups automatically</span>
+                  <span class="setting-desc">每日自动运行数据库备份</span>
                 </div>
               </div>
             </div>
@@ -83,32 +83,32 @@
         </el-tab-pane>
 
         <!-- 安全设置 -->
-        <el-tab-pane label="Security" name="security">
+        <el-tab-pane label="安全" name="security">
           <div class="setting-group">
-            <h3 class="group-title">Authentication & Access</h3>
+            <h3 class="group-title">认证与访问</h3>
             <div class="setting-grid">
               <div class="setting-item">
-                <label class="setting-label">Session Timeout (Minutes)</label>
+                <label class="setting-label">会话超时时间（分钟）</label>
                 <el-input-number v-model="securitySettings.sessionTimeout" :min="5" :max="480" controls-position="right"
                   class="modern-input-number" style="width: 100%" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Max Login Attempts</label>
+                <label class="setting-label">最大登录尝试次数</label>
                 <el-input-number v-model="securitySettings.maxLoginAttempts" :min="3" :max="10"
                   controls-position="right" class="modern-input-number" style="width: 100%" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Require Strong Passwords</label>
+                <label class="setting-label">强密码要求</label>
                 <div class="setting-control-row">
                   <el-switch v-model="securitySettings.strongPassword" class="modern-switch" />
-                  <span class="setting-desc">Enforce uppercase, numbers, and symbols</span>
+                  <span class="setting-desc">要求包含大写字母、数字和符号</span>
                 </div>
               </div>
               <div class="setting-item">
-                <label class="setting-label">Two-Factor Authentication (2FA)</label>
+                <label class="setting-label">双因素认证（2FA）</label>
                 <div class="setting-control-row">
                   <el-switch v-model="securitySettings.twoFactorAuth" class="modern-switch" />
-                  <span class="setting-desc">Require OTP code upon login</span>
+                  <span class="setting-desc">登录时需要输入动态验证码</span>
                 </div>
               </div>
             </div>
@@ -117,18 +117,18 @@
           <div class="setting-divider"></div>
 
           <div class="setting-group">
-            <h3 class="group-title">Data & API Protection</h3>
+            <h3 class="group-title">数据与接口保护</h3>
             <div class="setting-grid">
               <div class="setting-item">
-                <label class="setting-label">API Rate Limit (Req / Min)</label>
+                <label class="setting-label">API 速率限制（次/分钟）</label>
                 <el-input-number v-model="securitySettings.apiRateLimit" :min="10" :max="1000" controls-position="right"
                   class="modern-input-number" style="width: 100%" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Database Encryption</label>
+                <label class="setting-label">数据库加密</label>
                 <div class="setting-control-row">
                   <el-switch v-model="securitySettings.dataEncryption" class="modern-switch" />
-                  <span class="setting-desc">Encrypt sensitive PII data at rest</span>
+                  <span class="setting-desc">对敏感个人信息进行静态加密</span>
                 </div>
               </div>
             </div>
@@ -136,27 +136,27 @@
         </el-tab-pane>
 
         <!-- 通知设置 -->
-        <el-tab-pane label="Notifications" name="notification">
+        <el-tab-pane label="通知" name="notification">
           <div class="setting-group">
-            <h3 class="group-title">SMTP Configuration</h3>
+            <h3 class="group-title">SMTP 邮件配置</h3>
             <div class="setting-grid">
               <div class="setting-item">
-                <label class="setting-label">SMTP Server</label>
+                <label class="setting-label">SMTP 服务器</label>
                 <el-input v-model="notificationSettings.smtpServer" placeholder="smtp.example.com"
                   class="modern-input" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">SMTP Port</label>
+                <label class="setting-label">SMTP 端口</label>
                 <el-input-number v-model="notificationSettings.smtpPort" :min="1" :max="65535" controls-position="right"
                   class="modern-input-number" style="width: 100%" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Sender Email Address</label>
+                <label class="setting-label">发件人邮箱</label>
                 <el-input v-model="notificationSettings.senderEmail" placeholder="noreply@example.com"
                   class="modern-input" />
               </div>
               <div class="setting-item">
-                <label class="setting-label">Enable Email Notifications</label>
+                <label class="setting-label">启用邮件通知</label>
                 <div class="setting-control-row">
                   <el-switch v-model="notificationSettings.emailEnabled" class="modern-switch" />
                 </div>
@@ -167,26 +167,26 @@
           <div class="setting-divider"></div>
 
           <div class="setting-group">
-            <h3 class="group-title">System Event Triggers</h3>
+            <h3 class="group-title">系统事件触发</h3>
             <div class="event-list">
               <div class="event-item">
                 <div class="event-info">
-                  <h4>New Student Registration</h4>
-                  <p>Send an alert when a new student profile is created.</p>
+                  <h4>新学生注册</h4>
+                  <p>当创建新的学生档案时发送提醒。</p>
                 </div>
                 <el-switch v-model="notificationSettings.newStudentNotify" class="modern-switch" />
               </div>
               <div class="event-item">
                 <div class="event-info">
-                  <h4>System Maintenance</h4>
-                  <p>Send an alert to all admins before scheduled maintenance.</p>
+                  <h4>系统维护</h4>
+                  <p>在计划维护前向所有管理员发送提醒。</p>
                 </div>
                 <el-switch v-model="notificationSettings.maintenanceNotify" class="modern-switch" />
               </div>
               <div class="event-item">
                 <div class="event-info">
-                  <h4>Database Backup Success</h4>
-                  <p>Send an alert when the daily automated backup completes.</p>
+                  <h4>数据库备份成功</h4>
+                  <p>当每日自动备份完成时发送提醒。</p>
                 </div>
                 <el-switch v-model="notificationSettings.backupNotify" class="modern-switch" />
               </div>
@@ -195,9 +195,9 @@
         </el-tab-pane>
 
         <!-- 系统监控 -->
-        <el-tab-pane label="System Monitor" name="monitor">
+        <el-tab-pane label="系统监控" name="monitor">
           <div class="setting-group">
-            <h3 class="group-title">Service Health</h3>
+            <h3 class="group-title">服务健康状态</h3>
             <div class="health-grid">
               <div class="health-card">
                 <div class="health-icon success">
@@ -206,8 +206,8 @@
                   </el-icon>
                 </div>
                 <div class="health-info">
-                  <h4>Database Connection</h4>
-                  <p class="status-success">Connected & Healthy</p>
+                  <h4>数据库连接</h4>
+                  <p class="status-success">已连接，运行正常</p>
                 </div>
               </div>
               <div class="health-card">
@@ -217,8 +217,8 @@
                   </el-icon>
                 </div>
                 <div class="health-info">
-                  <h4>API Services</h4>
-                  <p class="status-success">Running</p>
+                  <h4>API 服务</h4>
+                  <p class="status-success">运行中</p>
                 </div>
               </div>
               <div class="health-card">
@@ -228,8 +228,8 @@
                   </el-icon>
                 </div>
                 <div class="health-info">
-                  <h4>Storage Capacity</h4>
-                  <p class="status-warning">85% Used</p>
+                  <h4>存储容量</h4>
+                  <p class="status-warning">已使用 85%</p>
                 </div>
               </div>
               <div class="health-card">
@@ -239,8 +239,8 @@
                   </el-icon>
                 </div>
                 <div class="health-info">
-                  <h4>SMTP Mail Service</h4>
-                  <p class="status-success">Operational</p>
+                  <h4>SMTP 邮件服务</h4>
+                  <p class="status-success">正常运行</p>
                 </div>
               </div>
             </div>
@@ -250,16 +250,16 @@
 
           <div class="setting-group">
             <div class="log-header-wrapper">
-              <h3 class="group-title" style="margin: 0;">System Logs</h3>
+              <h3 class="group-title" style="margin: 0;">系统日志</h3>
               <div class="log-actions">
-                <el-select v-model="logLevel" placeholder="Level" class="modern-input" style="width: 120px">
-                  <el-option label="All Levels" value="all" />
-                  <el-option label="Error" value="error" />
-                  <el-option label="Warning" value="warning" />
-                  <el-option label="Info" value="info" />
+                <el-select v-model="logLevel" placeholder="级别" class="modern-input" style="width: 120px">
+                  <el-option label="全部级别" value="all" />
+                  <el-option label="错误" value="error" />
+                  <el-option label="警告" value="warning" />
+                  <el-option label="信息" value="info" />
                 </el-select>
-                <el-button class="secondary-btn" @click="refreshLogs">Refresh</el-button>
-                <el-button class="secondary-btn text-danger" @click="clearLogs">Clear Logs</el-button>
+                <el-button class="secondary-btn" @click="refreshLogs">刷新</el-button>
+                <el-button class="secondary-btn text-danger" @click="clearLogs">清空日志</el-button>
               </div>
             </div>
 
@@ -277,7 +277,7 @@
                   <span class="log-msg">{{ log.message }}</span>
                 </div>
                 <div v-if="systemLogs.length === 0" class="log-empty">
-                  No logs found for the selected criteria.
+                  未找到符合条件的日志记录。
                 </div>
               </div>
             </div>
@@ -304,7 +304,7 @@ export default {
     const logLevel = ref('all')
 
     const basicSettings = reactive({
-      systemName: 'Student Admin',
+      systemName: '学生管理系统',
       version: '1.2.4',
       adminEmail: 'admin@system.local',
       systemStatus: true,
@@ -344,25 +344,25 @@ export default {
       saving.value = true
       try {
         await new Promise(resolve => setTimeout(resolve, 800))
-        ElMessage.success('System settings saved successfully.')
+        ElMessage.success('系统设置保存成功')
       } catch (error) {
-        ElMessage.error('Failed to save settings.')
+        ElMessage.error('保存设置失败')
       } finally {
         saving.value = false
       }
     }
 
     const resetSettings = () => {
-      ElMessage.info('Settings reset to default values.')
+      ElMessage.info('已恢复默认设置')
     }
 
     const refreshLogs = () => {
-      ElMessage.success('Logs refreshed.')
+      ElMessage.success('日志已刷新')
     }
 
     const clearLogs = () => {
       systemLogs.value = []
-      ElMessage.success('System logs cleared.')
+      ElMessage.success('系统日志已清空')
     }
 
     return {

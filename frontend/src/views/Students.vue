@@ -3,8 +3,8 @@
     <!-- 页面头部 -->
     <div class="page-header">
       <div class="header-content">
-        <h1 class="page-title">Students</h1>
-        <p class="page-subtitle">Manage and view all student information</p>
+        <h1 class="page-title">学生管理</h1>
+        <p class="page-subtitle">管理和查看所有学生信息</p>
       </div>
       <div class="header-actions">
         <el-button type="primary" class="primary-btn" @click="showAddDialog = true">
@@ -19,7 +19,7 @@
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Total Students</span>
+          <span class="metric-label">学生总数</span>
           <el-icon class="metric-icon">
             <User />
           </el-icon>
@@ -28,7 +28,7 @@
       </div>
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Colleges</span>
+          <span class="metric-label">学院数</span>
           <el-icon class="metric-icon">
             <School />
           </el-icon>
@@ -37,7 +37,7 @@
       </div>
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Scholarships</span>
+          <span class="metric-label">奖学金</span>
           <el-icon class="metric-icon">
             <Trophy />
           </el-icon>
@@ -46,7 +46,7 @@
       </div>
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Average GPA</span>
+          <span class="metric-label">平均绩点</span>
           <el-icon class="metric-icon">
             <Star />
           </el-icon>
@@ -60,7 +60,7 @@
       <!-- 搜索和筛选区域 -->
       <div class="filter-bar">
         <div class="search-input-wrapper">
-          <el-input v-model="searchForm.search" placeholder="Search by name, ID, college..." class="modern-input"
+          <el-input v-model="searchForm.search" placeholder="按姓名、学号、学院搜索..." class="modern-input"
             clearable @keyup.enter="handleSearch">
             <template #prefix>
               <el-icon>
@@ -71,7 +71,7 @@
         </div>
 
         <div class="filter-selects">
-          <el-select v-model="searchForm.college" placeholder="College" clearable class="modern-select"
+          <el-select v-model="searchForm.college" placeholder="学院" clearable class="modern-select"
             @change="handleSearch">
             <el-option label="全部学院" value="" />
             <el-option label="计算机科学与技术学院" value="计算机科学与技术学院" />
@@ -81,7 +81,7 @@
             <el-option label="数学与统计学院" value="数学与统计学院" />
           </el-select>
 
-          <el-select v-model="searchForm.grade" placeholder="Grade" clearable class="modern-select"
+          <el-select v-model="searchForm.grade" placeholder="年级" clearable class="modern-select"
             @change="handleSearch">
             <el-option label="全部年级" value="" />
             <el-option label="大一" value="大一" />
@@ -93,7 +93,7 @@
             <el-option label="研三" value="研三" />
           </el-select>
 
-          <el-select v-model="searchForm.degree" placeholder="Degree" clearable class="modern-select"
+          <el-select v-model="searchForm.degree" placeholder="学历" clearable class="modern-select"
             @change="handleSearch">
             <el-option label="全部学历" value="" />
             <el-option label="本科" value="本科" />
@@ -101,7 +101,7 @@
             <el-option label="博士" value="博士" />
           </el-select>
 
-          <el-select v-model="searchForm.status" placeholder="Status" clearable class="modern-select"
+          <el-select v-model="searchForm.status" placeholder="状态" clearable class="modern-select"
             @change="handleSearch">
             <el-option label="全部状态" value="" />
             <el-option label="在读" value="在读" />
@@ -109,7 +109,7 @@
             <el-option label="毕业" value="毕业" />
           </el-select>
 
-          <el-button class="secondary-btn" @click="resetSearch">Reset</el-button>
+          <el-button class="secondary-btn" @click="resetSearch">重置</el-button>
         </div>
       </div>
 
@@ -119,7 +119,7 @@
           :header-cell-style="{ background: '#f9fafb', color: '#6b7280', fontWeight: '500', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="45" align="center" />
-          <el-table-column label="Student" min-width="220">
+          <el-table-column label="学生" min-width="220">
             <template #default="{ row }">
               <div class="student-cell">
                 <el-avatar :size="36" :src="row.avatar" class="cell-avatar">
@@ -132,26 +132,26 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="College & Major" min-width="200" show-overflow-tooltip>
+          <el-table-column label="学院与专业" min-width="200" show-overflow-tooltip>
             <template #default="{ row }">
               <div class="cell-primary">{{ row.college }}</div>
               <div class="cell-secondary">{{ row.major }}</div>
             </template>
           </el-table-column>
-          <el-table-column label="Grade & Class" min-width="140">
+          <el-table-column label="年级与班级" min-width="140">
             <template #default="{ row }">
               <div class="cell-primary">{{ row.grade }} ({{ row.degree }})</div>
               <div class="cell-secondary">{{ row.class }}</div>
             </template>
           </el-table-column>
-          <el-table-column label="GPA" width="100">
+          <el-table-column label="绩点" width="100">
             <template #default="{ row }">
               <div class="gpa-badge" :class="`gpa-${getGpaType(row.academicInfo?.gpa)}`">
                 {{ row.academicInfo?.gpa || 'N/A' }}
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="Status" width="100">
+          <el-table-column prop="status" label="状态" width="100">
             <template #default="{ row }">
               <span class="status-badge" :class="`status-${getStatusType(row.status)}`">
                 {{ row.status }}
@@ -161,9 +161,9 @@
           <el-table-column label="" width="160" align="right" fixed="right">
             <template #default="{ row }">
               <div class="action-cell">
-                <el-button type="primary" link @click="viewStudent(row)">View</el-button>
-                <el-button type="primary" link @click="editStudent(row)">Edit</el-button>
-                <el-button type="danger" link @click="deleteStudent(row)">Delete</el-button>
+                <el-button type="primary" link @click="viewStudent(row)">查看</el-button>
+                <el-button type="primary" link @click="editStudent(row)">编辑</el-button>
+                <el-button type="danger" link @click="deleteStudent(row)">删除</el-button>
               </div>
             </template>
           </el-table-column>
@@ -181,12 +181,12 @@
     <!-- 批量操作悬浮条 -->
     <div class="batch-actions-floating" v-if="selectedStudents.length > 0">
       <div class="batch-info">
-        <span>{{ selectedStudents.length }} selected</span>
+        <span>已选择 {{ selectedStudents.length }} 项</span>
       </div>
       <div class="batch-buttons">
-        <el-button class="batch-btn" @click="batchEdit">Edit</el-button>
-        <el-button class="batch-btn danger" @click="batchDelete">Delete</el-button>
-        <el-button class="batch-btn" @click="exportData">Export</el-button>
+        <el-button class="batch-btn" @click="batchEdit">编辑</el-button>
+        <el-button class="batch-btn danger" @click="batchDelete">删除</el-button>
+        <el-button class="batch-btn" @click="exportData">导出</el-button>
       </div>
     </div>
 

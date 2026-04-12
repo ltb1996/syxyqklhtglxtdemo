@@ -3,8 +3,8 @@
     <!-- 顶部欢迎区域 - 极简排版 -->
     <div class="welcome-section">
       <div class="welcome-text">
-        <h1 class="page-title">Overview</h1>
-        <p class="page-subtitle">{{ currentDate }} · Welcome back, {{ userInfo?.name }}</p>
+        <h1 class="page-title">概览</h1>
+        <p class="page-subtitle">{{ currentDate }} · 欢迎回来，{{ userInfo?.name }}</p>
       </div>
       <div class="welcome-actions">
         <el-button type="primary" class="primary-btn" @click="showAddStudent = true">
@@ -22,7 +22,7 @@
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Total Students</span>
+          <span class="metric-label">学生总数</span>
           <el-icon class="metric-icon">
             <User />
           </el-icon>
@@ -36,7 +36,7 @@
 
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Active Students</span>
+          <span class="metric-label">在读学生</span>
           <el-icon class="metric-icon">
             <Check />
           </el-icon>
@@ -50,7 +50,7 @@
 
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Average GPA</span>
+          <span class="metric-label">平均绩点</span>
           <el-icon class="metric-icon">
             <Trophy />
           </el-icon>
@@ -64,7 +64,7 @@
 
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Colleges & Degrees</span>
+          <span class="metric-label">学院与学历</span>
           <el-icon class="metric-icon">
             <School />
           </el-icon>
@@ -159,7 +159,7 @@
           </div>
           <div class="panel-body p-0">
             <div v-if="recentStudents.length === 0" class="empty-state">
-              <span class="empty-text">No recent students</span>
+              <span class="empty-text">暂无学生数据</span>
             </div>
             <div v-else class="feed-list">
               <div v-for="student in recentStudents" :key="student._id" class="feed-item">
@@ -223,9 +223,9 @@ export default {
     })
 
     const currentDate = computed(() => {
-      return new Date().toLocaleDateString('en-US', {
+      return new Date().toLocaleDateString('zh-CN', {
         year: 'numeric',
-        month: 'short',
+        month: 'long',
         day: 'numeric'
       })
     })

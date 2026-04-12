@@ -6,17 +6,16 @@
         <div class="brand-content">
           <div class="logo-wrapper">
             <div class="logo-icon">
-              <img :src="faviconIcon" alt="Student Admin Logo" class="logo-image" />
+              <img :src="faviconIcon" alt="学生管理系统" class="logo-image" />
             </div>
-            <span class="logo-text">Student Admin</span>
+            <span class="logo-text">学生管理系统</span>
           </div>
-          <h1 class="brand-title">Welcome to Student Management System</h1>
-          <p class="brand-desc">A modern, efficient, and comprehensive solution for managing student information,
-            academic records, and career development.</p>
+          <h1 class="brand-title">欢迎使用学生信息管理系统</h1>
+          <p class="brand-desc">一个现代化、高效、全面的学生信息管理解决方案，涵盖学生基本信息、学业记录和职业发展管理。</p>
         </div>
         <!-- 背景插图或纹理 -->
         <div class="brand-illustration">
-          <img src="../assets/bg.png" alt="System Illustration" class="hero-image" />
+          <img src="../assets/bg.png" alt="系统插图" class="hero-image" />
         </div>
       </div>
 
@@ -24,13 +23,13 @@
       <div class="form-section">
         <div class="form-container">
           <div class="form-header">
-            <h2>Sign in to your account</h2>
-            <p>Please enter your credentials to access the system.</p>
+            <h2>登录您的账户</h2>
+            <p>请输入您的凭证以访问系统。</p>
           </div>
 
           <el-form :model="loginForm" :rules="rules" ref="loginFormRef" class="modern-login-form" label-position="top">
-            <el-form-item prop="username" label="Username">
-              <el-input v-model="loginForm.username" placeholder="admin / user" class="modern-input"
+            <el-form-item prop="username" label="用户名">
+              <el-input v-model="loginForm.username" placeholder="请输入用户名" class="modern-input"
                 @keyup.enter="handleLogin">
                 <template #prefix>
                   <el-icon>
@@ -40,8 +39,8 @@
               </el-input>
             </el-form-item>
 
-            <el-form-item prop="password" label="Password">
-              <el-input v-model="loginForm.password" type="password" placeholder="••••••" class="modern-input"
+            <el-form-item prop="password" label="密码">
+              <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" class="modern-input"
                 @keyup.enter="handleLogin" show-password>
                 <template #prefix>
                   <el-icon>
@@ -52,12 +51,12 @@
             </el-form-item>
 
             <div class="form-options">
-              <el-checkbox v-model="rememberMe" class="modern-checkbox">Remember me</el-checkbox>
-              <a href="#" class="forgot-link">Forgot password?</a>
+              <el-checkbox v-model="rememberMe" class="modern-checkbox">记住我</el-checkbox>
+              <a href="#" class="forgot-link">忘记密码？</a>
             </div>
 
             <el-button type="primary" class="primary-btn login-btn" :loading="loading" @click="handleLogin">
-              Sign In
+              登 录
               <el-icon class="btn-icon-right">
                 <Right />
               </el-icon>

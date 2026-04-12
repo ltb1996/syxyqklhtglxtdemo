@@ -7,14 +7,14 @@
         </el-icon>
       </div>
       <h1 class="error-code">404</h1>
-      <h2 class="error-title">Page Not Found</h2>
-      <p class="error-desc">Sorry, the page you are looking for doesn't exist or has been moved.</p>
+      <h2 class="error-title">页面未找到</h2>
+      <p class="error-desc">抱歉，您访问的页面不存在或已被移动。</p>
       <div class="action-buttons">
         <el-button class="secondary-btn" size="large" @click="goBack">
-          Go Back
+          返回上页
         </el-button>
         <el-button type="primary" class="primary-btn" size="large" @click="goHome">
-          Return to Dashboard
+          返回首页
         </el-button>
       </div>
     </div>

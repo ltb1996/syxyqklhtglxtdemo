@@ -7,10 +7,10 @@
         <div class="logo-section">
           <div class="logo">
             <div class="logo-icon">
-              <img :src="faviconIcon" alt="Student Admin Logo" class="logo-image" />
+              <img :src="faviconIcon" alt="学生管理系统" class="logo-image" />
             </div>
             <div v-show="!isCollapse" class="logo-content">
-              <span class="logo-title">Student Admin</span>
+              <span class="logo-title">学生管理系统</span>
             </div>
           </div>
         </div>
@@ -24,14 +24,14 @@
             <div class="online-indicator"></div>
           </div>
           <div class="user-details">
-            <div class="user-name">{{ userInfo?.name || 'Admin' }}</div>
+            <div class="user-name">{{ userInfo?.name || '管理员' }}</div>
             <div class="user-role">系统管理员</div>
           </div>
         </div>
 
         <!-- 菜单分组 -->
         <div class="menu-section">
-          <div v-show="!isCollapse" class="menu-group-title">Overview</div>
+          <div v-show="!isCollapse" class="menu-group-title">概览</div>
           <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true" router
             class="sidebar-menu">
             <el-menu-item index="/dashboard" class="menu-item-custom">
@@ -59,7 +59,7 @@
 
         <!-- 系统管理分组 -->
         <div class="menu-section">
-          <div v-show="!isCollapse" class="menu-group-title">Settings</div>
+          <div v-show="!isCollapse" class="menu-group-title">设置</div>
           <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true" router
             class="sidebar-menu">
             <el-menu-item index="/profile" class="menu-item-custom">
@@ -132,8 +132,8 @@
               <template #dropdown>
                 <el-dropdown-menu class="modern-dropdown">
                   <div class="dropdown-header">
-                    <span class="dropdown-name">{{ userInfo?.name || 'Admin' }}</span>
-                    <span class="dropdown-email">{{ userInfo?.email || 'admin@example.com' }}</span>
+                    <span class="dropdown-name">{{ userInfo?.name || '管理员' }}</span>
+                    <span class="dropdown-email">{{ userInfo?.email || 'admin@system.local' }}</span>
                   </div>
                   <el-dropdown-item command="profile">
                     <el-icon>

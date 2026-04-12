@@ -3,8 +3,8 @@
     <!-- 页面头部 -->
     <div class="page-header">
       <div class="header-content">
-        <h1 class="page-title">Data Analytics</h1>
-        <p class="page-subtitle">Student data analysis and insights</p>
+        <h1 class="page-title">数据分析</h1>
+        <p class="page-subtitle">学生数据分析与洞察</p>
       </div>
     </div>
 
@@ -12,46 +12,46 @@
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Average GPA</span>
+          <span class="metric-label">平均绩点</span>
           <el-icon class="metric-icon"><Trophy /></el-icon>
         </div>
         <div class="metric-value">{{ statistics.avgGpa || '0.00' }}</div>
         <div class="metric-trend positive">
-          <span class="trend-value">{{ statistics.excellentCount || 0 }} students</span>
-          <span class="trend-label">GPA >= 3.7</span>
+          <span class="trend-value">{{ statistics.excellentCount || 0 }} 人</span>
+          <span class="trend-label">绩点 >= 3.7</span>
         </div>
       </div>
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Scholarship Rate</span>
+          <span class="metric-label">奖学金获得率</span>
           <el-icon class="metric-icon"><Medal /></el-icon>
         </div>
         <div class="metric-value">{{ scholarshipRate }}%</div>
         <div class="metric-trend neutral">
-          <span class="trend-value">{{ totalScholarships }} awards</span>
-          <span class="trend-label">total</span>
+          <span class="trend-value">{{ totalScholarships }} 项</span>
+          <span class="trend-label">奖学金总数</span>
         </div>
       </div>
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Gender Ratio (M:F)</span>
+          <span class="metric-label">男女比例</span>
           <el-icon class="metric-icon"><User /></el-icon>
         </div>
         <div class="metric-value">{{ genderRatioText }}</div>
         <div class="metric-trend neutral">
-          <span class="trend-value">{{ statistics.total || 0 }} students</span>
-          <span class="trend-label">total</span>
+          <span class="trend-value">共 {{ statistics.total || 0 }} 人</span>
+          <span class="trend-label">学生总数</span>
         </div>
       </div>
       <div class="metric-card">
         <div class="metric-header">
-          <span class="metric-label">Academic Alert</span>
+          <span class="metric-label">学业预警</span>
           <el-icon class="metric-icon"><Warning /></el-icon>
         </div>
         <div class="metric-value">{{ lowGpaStudents.length }}</div>
         <div class="metric-trend" :class="lowGpaStudents.length > 0 ? 'negative' : 'positive'">
-          <span class="trend-value">GPA &lt; 2.0</span>
-          <span class="trend-label">need attention</span>
+          <span class="trend-value">绩点 &lt; 2.0</span>
+          <span class="trend-label">需要关注</span>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
         <!-- GPA 分布 -->
         <div class="panel">
           <div class="panel-header">
-            <h3 class="panel-title">GPA Distribution</h3>
+            <h3 class="panel-title">绩点分布</h3>
           </div>
           <div class="panel-body">
             <div class="simple-bar-chart">
@@ -82,17 +82,17 @@
         <!-- 各学院成绩对比 -->
         <div class="panel">
           <div class="panel-header">
-            <h3 class="panel-title">College GPA Comparison</h3>
+            <h3 class="panel-title">各学院绩点对比</h3>
           </div>
           <div class="panel-body">
             <div v-if="collegeGpaData.length === 0" class="empty-state">
-              <span class="empty-text">No data available</span>
+              <span class="empty-text">暂无数据</span>
             </div>
             <div v-else class="simple-bar-chart">
               <div v-for="item in collegeGpaData" :key="item.college" class="bar-row">
                 <div class="bar-label">
                   <span class="label-name">{{ item.college }}</span>
-                  <span class="label-value">Avg {{ item.avgGpa }} · {{ item.count }} students</span>
+                  <span class="label-value">均值 {{ item.avgGpa }} · {{ item.count }} 人</span>
                 </div>
                 <div class="bar-track">
                   <div class="bar-fill" :style="{ width: (item.avgGpa / 4.0 * 100) + '%', backgroundColor: '#3b82f6' }"></div>
@@ -106,7 +106,7 @@
         <div class="charts-row">
           <div class="panel">
             <div class="panel-header">
-              <h3 class="panel-title">Enrollment Year Distribution</h3>
+              <h3 class="panel-title">年级分布</h3>
             </div>
             <div class="panel-body">
               <div class="grade-stats-grid">
@@ -115,7 +115,7 @@
                   <div class="grade-name">{{ grade._id }}</div>
                 </div>
                 <div v-if="!statistics.byGrade || statistics.byGrade.length === 0" class="empty-state-inline">
-                  <span class="empty-text">No data</span>
+                  <span class="empty-text">暂无数据</span>
                 </div>
               </div>
             </div>
@@ -123,7 +123,7 @@
 
           <div class="panel">
             <div class="panel-header">
-              <h3 class="panel-title">Degree Distribution</h3>
+              <h3 class="panel-title">学历分布</h3>
             </div>
             <div class="panel-body">
               <div class="grade-stats-grid">
@@ -132,7 +132,7 @@
                   <div class="grade-name">{{ degree._id }}</div>
                 </div>
                 <div v-if="!statistics.byDegree || statistics.byDegree.length === 0" class="empty-state-inline">
-                  <span class="empty-text">No data</span>
+                  <span class="empty-text">暂无数据</span>
                 </div>
               </div>
             </div>
@@ -145,7 +145,7 @@
         <!-- 性别分布 -->
         <div class="panel">
           <div class="panel-header">
-            <h3 class="panel-title">Gender Distribution</h3>
+            <h3 class="panel-title">性别分布</h3>
           </div>
           <div class="panel-body">
             <div class="donut-chart">
@@ -160,18 +160,18 @@
               </svg>
               <div class="donut-center">
                 <div class="donut-total">{{ statistics.total || 0 }}</div>
-                <div class="donut-label">Total</div>
+                <div class="donut-label">总计</div>
               </div>
             </div>
             <div class="legend-list">
               <div class="legend-item">
                 <span class="legend-dot" style="background-color: #3b82f6;"></span>
-                <span class="legend-name">Male</span>
+                <span class="legend-name">男</span>
                 <span class="legend-value">{{ genderData.male }}</span>
               </div>
               <div class="legend-item">
                 <span class="legend-dot" style="background-color: #f472b6;"></span>
-                <span class="legend-name">Female</span>
+                <span class="legend-name">女</span>
                 <span class="legend-value">{{ genderData.female }}</span>
               </div>
             </div>
@@ -181,7 +181,7 @@
         <!-- 政治面貌分布 -->
         <div class="panel">
           <div class="panel-header">
-            <h3 class="panel-title">Political Status</h3>
+            <h3 class="panel-title">政治面貌</h3>
           </div>
           <div class="panel-body p-0">
             <div class="stat-list">
@@ -201,12 +201,12 @@
         <!-- 学业预警 -->
         <div class="panel">
           <div class="panel-header">
-            <h3 class="panel-title">Academic Alerts</h3>
+            <h3 class="panel-title">学业预警</h3>
             <span class="alert-badge" v-if="lowGpaStudents.length > 0">{{ lowGpaStudents.length }}</span>
           </div>
           <div class="panel-body p-0">
             <div v-if="lowGpaStudents.length === 0" class="empty-state">
-              <span class="empty-text">No academic alerts</span>
+              <span class="empty-text">暂无学业预警</span>
             </div>
             <div v-else class="feed-list">
               <div v-for="student in lowGpaStudents" :key="student._id" class="feed-item">
@@ -289,10 +289,10 @@ export default {
     // GPA distribution
     const gpaDistribution = computed(() => {
       const bins = [
-        { label: '3.7 - 4.0 (Excellent)', min: 3.7, max: 4.01, color: '#10b981', count: 0 },
-        { label: '3.0 - 3.69 (Good)', min: 3.0, max: 3.7, color: '#3b82f6', count: 0 },
-        { label: '2.0 - 2.99 (Average)', min: 2.0, max: 3.0, color: '#f59e0b', count: 0 },
-        { label: '0 - 1.99 (At Risk)', min: 0, max: 2.0, color: '#ef4444', count: 0 }
+        { label: '3.7 - 4.0（优秀）', min: 3.7, max: 4.01, color: '#10b981', count: 0 },
+        { label: '3.0 - 3.69（良好）', min: 3.0, max: 3.7, color: '#3b82f6', count: 0 },
+        { label: '2.0 - 2.99（一般）', min: 2.0, max: 3.0, color: '#f59e0b', count: 0 },
+        { label: '0 - 1.99（预警）', min: 0, max: 2.0, color: '#ef4444', count: 0 }
       ]
       allStudents.value.forEach(s => {
         const gpa = s.academicInfo?.gpa ?? -1

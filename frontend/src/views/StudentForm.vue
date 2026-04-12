@@ -201,9 +201,9 @@
 
       <!-- 操作按钮 -->
       <div class="form-actions">
-        <el-button class="secondary-btn" @click="handleCancel">Cancel</el-button>
+        <el-button class="secondary-btn" @click="handleCancel">取消</el-button>
         <el-button type="primary" class="primary-btn" @click="handleSubmit" :loading="loading">
-          {{ isEdit ? "Save Changes" : "Add Student" }}
+          {{ isEdit ? "保存修改" : "添加学生" }}
         </el-button>
       </div>
     </el-form>
