@@ -27,7 +27,7 @@ app.use(cors({
 // 限流配置
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15分钟
-  max: 100, // 每个IP最多100个请求
+  max: 200, // 每个IP最多200个请求
   message: '请求过于频繁，请稍后再试'
 });
 app.use(limiter);
@@ -52,6 +52,7 @@ app.get('/', (req, res) => {
 // API路由
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/students', require('./routes/students'));
+app.use('/api/ai', require('./routes/ai'));
 
 // 404处理
 app.use((req, res, next) => {

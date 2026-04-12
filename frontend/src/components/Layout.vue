@@ -54,6 +54,13 @@
               </el-icon>
               <span>数据分析</span>
             </el-menu-item>
+
+            <el-menu-item index="/ai-chat" class="menu-item-custom">
+              <el-icon>
+                <ChatDotRound />
+              </el-icon>
+              <span>AI 问答</span>
+            </el-menu-item>
           </el-menu>
         </div>
 
@@ -174,14 +181,14 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import faviconIcon from '../assets/favicon.ico'
 import {
   Odometer, User, Setting, UserFilled, Tools,
-  Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis
+  Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis, ChatDotRound
 } from '@element-plus/icons-vue'
 
 export default {
   name: 'Layout',
   components: {
     Odometer, User, Setting, UserFilled, Tools,
-    Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis
+    Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis, ChatDotRound
   },
   setup() {
     const route = useRoute()
@@ -205,6 +212,7 @@ export default {
         '/dashboard': [{ title: '首页', path: '/dashboard' }],
         '/students': [{ title: '学生管理', path: '/students' }],
         '/analytics': [{ title: '数据分析', path: '/analytics' }],
+        '/ai-chat': [{ title: 'AI 问答', path: '/ai-chat' }],
         '/profile': [{ title: '个人中心', path: '/profile' }],
         '/settings': [{ title: '系统设置', path: '/settings' }]
       }

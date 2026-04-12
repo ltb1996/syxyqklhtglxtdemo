@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Students from '../views/Students.vue'
 import Analytics from '../views/Analytics.vue'
+import AiChat from '../views/AiChat.vue'
 
 const routes = [
   {
@@ -54,6 +55,15 @@ const routes = [
         meta: {
           title: '数据分析',
           icon: 'DataAnalysis'
+        }
+      },
+      {
+        path: 'ai-chat',
+        name: 'AiChat',
+        component: AiChat,
+        meta: {
+          title: 'AI 问答',
+          icon: 'ChatDotRound'
         }
       },
       {

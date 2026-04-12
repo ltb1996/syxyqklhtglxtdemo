@@ -59,4 +59,7 @@ export const updateStudent = (id, data) => api.put(`/students/${id}`, data)
 export const deleteStudent = (id) => api.delete(`/students/${id}`)
 export const getStatistics = () => api.get('/students/statistics')
 
+// AI 问答
+export const aiChat = (data) => api.post('/ai/chat', data)
+
 export default api
