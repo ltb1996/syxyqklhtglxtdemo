@@ -7,11 +7,11 @@
         <p class="page-subtitle">{{ currentDate }} · 欢迎回来，{{ userInfo?.name }}</p>
       </div>
       <div class="welcome-actions">
-        <el-button type="primary" class="primary-btn" @click="showAddStudent = true">
+        <!-- <el-button type="primary" class="primary-btn" @click="showAddStudent = true">
           <el-icon>
             <Plus />
           </el-icon>添加学生
-        </el-button>
+        </el-button> -->
         <el-button class="secondary-btn" @click="exportData">
           导出报表
         </el-button>
