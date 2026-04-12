@@ -387,9 +387,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 /* 顶部标题区域 */
