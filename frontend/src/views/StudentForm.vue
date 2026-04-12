@@ -436,19 +436,13 @@ export default {
 .modern-form-wrapper {
   max-height: 70vh;
   overflow-y: auto;
-  padding-right: 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
 }
 
 .modern-form-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-.modern-form-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-.modern-form-wrapper::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 3px;
+  display: none;
 }
 
 .form-section {

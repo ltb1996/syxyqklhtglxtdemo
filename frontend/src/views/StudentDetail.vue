@@ -475,20 +475,13 @@ export default {
 .student-detail-wrapper {
   max-height: 75vh;
   overflow-y: auto;
-  padding-right: 8px; /* 给滚动条留出空间 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
 }
 
-/* 自定义滚动条 */
 .student-detail-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-.student-detail-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-.student-detail-wrapper::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 3px;
+  display: none;
 }
 
 /* 顶部信息卡片 */

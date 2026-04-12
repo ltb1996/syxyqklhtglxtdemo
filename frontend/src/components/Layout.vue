@@ -47,6 +47,13 @@
               </el-icon>
               <span>学生管理</span>
             </el-menu-item>
+
+            <el-menu-item index="/analytics" class="menu-item-custom">
+              <el-icon>
+                <DataAnalysis />
+              </el-icon>
+              <span>数据分析</span>
+            </el-menu-item>
           </el-menu>
         </div>
 
@@ -167,14 +174,14 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import faviconIcon from '../assets/favicon.ico'
 import {
   Odometer, User, Setting, UserFilled, Tools,
-  Expand, Fold, Search, Bell, ArrowDown, SwitchButton
+  Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis
 } from '@element-plus/icons-vue'
 
 export default {
   name: 'Layout',
   components: {
     Odometer, User, Setting, UserFilled, Tools,
-    Expand, Fold, Search, Bell, ArrowDown, SwitchButton
+    Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis
   },
   setup() {
     const route = useRoute()
@@ -197,6 +204,7 @@ export default {
       const breadcrumbMap = {
         '/dashboard': [{ title: '首页', path: '/dashboard' }],
         '/students': [{ title: '学生管理', path: '/students' }],
+        '/analytics': [{ title: '数据分析', path: '/analytics' }],
         '/profile': [{ title: '个人中心', path: '/profile' }],
         '/settings': [{ title: '系统设置', path: '/settings' }]
       }
@@ -583,6 +591,12 @@ export default {
   padding: 24px;
   height: calc(100vh - 64px);
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.main-content::-webkit-scrollbar {
+  display: none;
 }
 
 .page-container {

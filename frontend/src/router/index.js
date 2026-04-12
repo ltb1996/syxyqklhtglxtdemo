@@ -6,6 +6,7 @@ import Layout from '../components/Layout.vue'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Students from '../views/Students.vue'
+import Analytics from '../views/Analytics.vue'
 
 const routes = [
   {
@@ -44,6 +45,15 @@ const routes = [
         meta: {
           title: '学生管理',
           icon: 'User'
+        }
+      },
+      {
+        path: 'analytics',
+        name: 'Analytics',
+        component: Analytics,
+        meta: {
+          title: '数据分析',
+          icon: 'DataAnalysis'
         }
       },
       {

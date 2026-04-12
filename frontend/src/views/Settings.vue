@@ -780,23 +780,15 @@ export default {
   padding: 16px;
   max-height: 400px;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 13px;
   line-height: 1.6;
 }
 
-/* 滚动条 */
 .terminal-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.terminal-body::-webkit-scrollbar-track {
-  background: #0f172a;
-}
-
-.terminal-body::-webkit-scrollbar-thumb {
-  background-color: #334155;
-  border-radius: 4px;
+  display: none;
 }
 
 .log-line {
