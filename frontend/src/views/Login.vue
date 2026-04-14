@@ -74,7 +74,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { login } from '../api'
 import { User, Lock, Right } from '@element-plus/icons-vue'
-import faviconIcon from '../assets/favicon.ico'
+import faviconIcon from '../assets/logologo.png'
 
 export default {
   name: 'Login',

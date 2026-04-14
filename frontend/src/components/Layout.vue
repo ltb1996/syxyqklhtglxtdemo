@@ -178,7 +178,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import faviconIcon from '../assets/favicon.ico'
+import faviconIcon from '../assets/logologo.png'
 import {
   Odometer, User, Setting, UserFilled, Tools,
   Expand, Fold, Search, Bell, ArrowDown, SwitchButton, DataAnalysis, ChatDotRound
