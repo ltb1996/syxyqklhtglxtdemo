@@ -16,11 +16,20 @@ connectDB();
 // 安全中间件
 app.use(helmet());
 
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
 // 跨域配置
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://your-domain.com' 
-    : 'http://localhost:5173', // Vue开发服务器的默认端口
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`不允许的跨域来源: ${origin}`));
+  },
   credentials: true
 }));
 
@@ -69,9 +78,11 @@ app.use(errorHandler);
 
 // 启动服务器
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const HOST = '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
   console.log(`🚀 服务器运行在端口 ${PORT}`);
-  console.log(`📡 API地址: http://localhost:${PORT}`);
+  console.log(`📡 API地址: http://${HOST}:${PORT}`);
   console.log(`🌍 环境: ${process.env.NODE_ENV}`);
 });
 
